@@ -1,0 +1,94 @@
+{
+  "events": {
+    "event1": {
+      "title": "Lagos Jazz Festival",
+      "description": "Experience the soulful rhythms of jazz with top musicians from across the globe.",
+      "date": "2025-03-15T18:00:00.000Z",
+      "location": "Eko Hotels and Suites, Lagos",
+      "imageUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/lagos-jazz-tickets",
+      "createdBy": "user1"
+    },
+    "event2": {
+      "title": "Abuja Startup Summit",
+      "description": "Join leading entrepreneurs and tech enthusiasts at the biggest startup event of the year.",
+      "date": "2025-04-20T09:00:00.000Z",
+      "location": "International Conference Centre, Abuja",
+      "imageUrl": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/abuja-startup-summit",
+      "createdBy": "user2"
+    },
+    "event3": {
+      "title": "Port Harcourt Art Fair",
+      "description": "An artistic celebration featuring galleries, live art, and workshops.",
+      "date": "2025-05-01T14:00:00.000Z",
+      "location": "Port Harcourt Mall, Port Harcourt",
+      "imageUrl": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/ph-art-fair",
+      "createdBy": "user3"
+    },
+    "event4": {
+      "title": "Abuja Food Carnival",
+      "description": "Savor delicacies from around the world at this one-of-a-kind food festival.",
+      "date": "2025-06-10T12:00:00.000Z",
+      "location": "Jabi Lake Mall, Abuja",
+      "imageUrl": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/abuja-food-carnival",
+      "createdBy": "user4"
+    },
+    "event5": {
+      "title": "Ibadan Fitness Marathon",
+      "description": "A fitness-packed day featuring marathons, yoga classes, and fitness challenges.",
+      "date": "2025-07-15T07:00:00.000Z",
+      "location": "Adamasingba Stadium, Ibadan",
+      "imageUrl": "https://images.unsplash.com/photo-1554284126-aa88f22d77cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/ibadan-fitness-marathon",
+      "createdBy": "user5"
+    },
+    "event6": {
+      "title": "Enugu Tech Workshop",
+      "description": "Learn cutting-edge tech skills from industry leaders.",
+      "date": "2025-08-10T10:00:00.000Z",
+      "location": "Oakland Conference Center, Enugu",
+      "imageUrl": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/enugu-tech-workshop",
+      "createdBy": "user6"
+    },
+    "event7": {
+      "title": "Calabar Carnival Parade",
+      "description": "Join the vibrant and colorful celebration at Africa's biggest street party.",
+      "date": "2025-12-25T16:00:00.000Z",
+      "location": "Calabar City, Calabar",
+      "imageUrl": "https://images.unsplash.com/photo-1529070538774-1843cb3265df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/calabar-carnival-parade",
+      "createdBy": "user7"
+    },
+    "event8": {
+      "title": "Kano Cultural Festival",
+      "description": "Explore the rich heritage of Northern Nigeria with cultural performances and exhibitions.",
+      "date": "2025-11-05T11:00:00.000Z",
+      "location": "Kano Emirate Palace Grounds, Kano",
+      "imageUrl": "https://images.unsplash.com/photo-1521310192544-9a105c336b27?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/kano-cultural-festival",
+      "createdBy": "user8"
+    },
+    "event9": {
+      "title": "Ogun Literary Festival",
+      "description": "Dive into the world of literature with guest authors, panel discussions, and book signings.",
+      "date": "2025-09-20T15:00:00.000Z",
+      "location": "Cultural Centre, Kuto, Abeokuta",
+      "imageUrl": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/ogun-literary-festival",
+      "createdBy": "user9"
+    },
+    "event10": {
+      "title": "Benin Art Expo",
+      "description": "Showcasing the finest art pieces inspired by the Benin Kingdom.",
+      "date": "2025-10-15T13:00:00.000Z",
+      "location": "National Museum, Benin City",
+      "imageUrl": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+      "ticketLink": "https://example.com/benin-art-expo",
+      "createdBy": "user10"
+    }
+  }
+}
