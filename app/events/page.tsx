@@ -4,10 +4,18 @@ import { getDatabase, ref, get } from 'firebase/database';
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Define the Event interface
+interface Event {
+  id: string;
+  title: string;
+  description?: string;
+  imageUrl?: string;
+}
+
 const EventsList = () => {
-  const [firebaseEvents, setFirebaseEvents] = useState<any[]>([]);
+  const [firebaseEvents, setFirebaseEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
 
@@ -19,8 +27,8 @@ const EventsList = () => {
       const snapshot = await get(eventsRef);
 
       if (snapshot.exists()) {
-        const firebaseData = snapshot.val();
-        const eventsArray = Object.keys(firebaseData).map((key) => ({
+        const firebaseData: Record<string, Omit<Event, 'id'>> = snapshot.val();
+        const eventsArray: Event[] = Object.keys(firebaseData).map((key) => ({
           id: key,
           ...firebaseData[key],
         }));

@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { getDatabase, ref, get } from 'firebase/database';
 import Image from 'next/image';
 
 type Event = {
+  id: string;
   title: string;
   description: string;
   date: string;
@@ -14,55 +15,69 @@ type Event = {
 };
 
 const EventDetailPage = ({ params }: { params: { id: string } }) => {
+  const router = useRouter();
   const [event, setEvent] = useState<Event | null>(null);
-  const [id, setId] = useState<string | null>(null); // Add local state for id
+  const [loading, setLoading] = useState(true);
 
-  // Unwrap params using React.use()
   useEffect(() => {
-    const fetchId = async () => {
-      const resolvedParams = await params; // Unwrap the params promise
-      setId(resolvedParams.id);
-    };
-    fetchId();
-  }, [params]);
+    const fetchEvent = async () => {
+      try {
+        const db = getDatabase();
+        const eventRef = ref(db, `events/${params.id}`);
+        const snapshot = await get(eventRef);
 
-  // Fetch event details from Firebase
-  const fetchEventDetails = async (eventId: string) => {
-    try {
-      const db = getDatabase();
-      const eventRef = ref(db, `events/${eventId}`); // Adjust to your Firebase structure
-      const snapshot = await get(eventRef);
-
-      if (snapshot.exists()) {
-        setEvent(snapshot.val());
-      } else {
-        console.error('Event not found');
+        if (snapshot.exists()) {
+          setEvent({ ...snapshot.val(), id: snapshot.key! });
+        } else {
+          setEvent(null);
+        }
+      } catch (error) {
+        console.error('Error fetching event details:', error);
+        setEvent(null);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching event details:', error);
-    }
-  };
+    };
 
-  useEffect(() => {
-    if (id) {
-      fetchEventDetails(id); // Fetch event if ID is available
-    }
-  }, [id]);
+    fetchEvent();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader">Loading...</div>
+      </div>
+    );
+  }
 
   if (!event) {
-    return <div>Loading...</div>; // Loading state while event data is being fetched
+    return (
+      <div className="flex flex-col items-center justify-center text-center py-16">
+        <h2 className="text-3xl font-semibold text-gray-700 mb-4">Event Not Found</h2>
+        <p className="text-lg text-gray-600 mb-6">
+          We couldn’t find the event you were looking for. It might have been removed or the link might be incorrect.
+        </p>
+        <button
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+          onClick={() => router.push('/events')}
+        >
+          View All Events
+        </button>
+      </div>
+    );
   }
 
   return (
     <div className="max-w-3xl mx-auto py-16 px-6">
       <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
-      <p className="text-lg text-gray-600 mb-4">{event.date}</p>
+      <p className="text-lg text-gray-600 mb-4">{new Date(event.date).toLocaleString()}</p>
       <div className="relative w-full h-64 mb-8">
-        <Image 
-          src={event.imageUrl || '/images/default-event.jpg'} 
-          alt={event.title} 
-          layout="fill" 
+        <Image
+          src={event.imageUrl || '/images/default-event.jpg'}
+          alt={event.title}
+          layout="fill"
           objectFit="cover"
+          className="rounded"
         />
       </div>
       <p className="text-xl text-gray-800 mb-6">{event.description}</p>
@@ -85,9 +100,9 @@ const EventDetailPage = ({ params }: { params: { id: string } }) => {
         <p className="text-lg text-gray-700">{event.location}</p>
       </div>
 
-      <button 
+      <button
         className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 mt-8"
-        onClick={() => alert('Ticket purchase functionality to be added')}
+        onClick={() => router.push(`/events/${event.id}/tickets`)}
       >
         Purchase Tickets
       </button>

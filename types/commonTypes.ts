@@ -1,14 +1,12 @@
 // Import necessary icons from react-icons (or any icon library you prefer)
 import {
-  FaIndustry,
-  FaShoppingCart,
-  FaUtensils,
-  FaTruck,
+  FaCalendarAlt,
+  FaTicketAlt,
   FaCogs,
-  FaClipboardList,
   FaChartLine,
   FaDollarSign,
-  FaHireAHelper,
+  FaQuestionCircle,
+  FaUserCog,
 } from 'react-icons/fa';
 
 // Define a type for reusable links, including an optional array for dropdowns
@@ -22,33 +20,33 @@ export interface Link {
 // Example of reusable links with icons and dropdowns
 export const links: Link[] = [
   {
-    name: 'Industries',
-    href: '/industries',
-    icon: FaIndustry, // Pass the icon component directly, not as JSX
+    name: 'Events Dashboard',
+    href: '/dashboard/organizer',
+    icon: FaCalendarAlt, // Updated icon for events
     dropdownItems: [
-      { name: 'Retail', href: '/retail', icon: FaShoppingCart }, // Pass the icon component directly
-      { name: 'Restaurant', href: '/restuarant', icon: FaUtensils },
-      { name: 'Distribution', href: '/distribution', icon: FaTruck },
+      { name: 'Upcoming Events', href: '/events/upcoming', icon: FaCalendarAlt },
+      { name: 'Event Analytics', href: '/events/analytics', icon: FaChartLine },
+      { name: 'Manage Events', href: '/events/manage', icon: FaTicketAlt },
     ],
   },
   {
-    name: 'Features',
+    name: 'Event Features',
     href: '/features',
-    icon: FaCogs, // Pass the icon component directly
+    icon: FaCogs, // Keep this as it represents features
     dropdownItems: [
-      { name: 'Point of Sale', href: '/events', icon: FaShoppingCart },
-      { name: 'Inventory Management', href: '/organizer/create-event', icon: FaClipboardList },
-      { name: 'Supply Chain Management', href: '/supplychain', icon: FaTruck },
-      { name: 'Reports & Analytics', href: '/reports', icon: FaChartLine },
+      { name: 'Event Registration', href: '/features/registration', icon: FaTicketAlt },
+      { name: 'Ticketing & Payments', href: '/features/ticketing', icon: FaDollarSign },
+      { name: 'Event Insights', href: '/features/insights', icon: FaChartLine },
     ],
   },
   {
-    name: 'Help',
+    name: 'Support',
     href: '/help',
-    icon: FaHireAHelper, // Pass the icon component directly
-  },{
-    name: 'Plans & Pricing',
+    icon: FaQuestionCircle, // Updated to match help/support area
+  },
+  {
+    name: 'Pricing & Plans',
     href: '/pricing',
-    icon: FaHireAHelper, // Pass the icon component directly
+    icon: FaDollarSign, // Keep this for the pricing section
   }
 ];

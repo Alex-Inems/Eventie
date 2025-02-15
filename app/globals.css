@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 640px) {
+  /* Ensure content is centered and doesn't overflow */
+  .max-w-screen-lg {
+    max-width: 100%;
+  }
+}
+
 .pagination {
     margin-top: 20px;
     display: flex;

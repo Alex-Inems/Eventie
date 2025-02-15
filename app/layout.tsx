@@ -1,9 +1,8 @@
-// app/layout.tsx
 import { Metadata } from "next";
+import Script from "next/script"; // Import Next.js Script component
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthProvider"; // Ensure correct path
 import Navbar from "@/components/Navbar/Navbar";
-
 
 export const metadata: Metadata = {
   title: "Uplift",
@@ -17,12 +16,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Paystack script loaded asynchronously */}
+        <Script
+          src="https://js.paystack.co/v1/inline.js"
+          strategy="afterInteractive"
+        />
+      </head>
+      
       <body>
         <AuthProvider>
-          <Navbar/>
+          <Navbar />
           {children} {/* Render child components/pages here */}
         </AuthProvider>
-      
       </body>
     </html>
   );
