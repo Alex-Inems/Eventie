@@ -10,9 +10,12 @@ import Sidebar from '@/components/Sidebar';
 import Mobilenav from '@/components/Mobilenav';
 import { AiOutlineFileImage } from 'react-icons/ai';
 import Image from 'next/image';
+
 const EventCreationForm = () => {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null); // Change 'any' to a more specific type if possible
+  
+  const [user, setUser] = useState<{ name: string | null; photoURL: string | null } | undefined>(undefined);
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
@@ -23,13 +26,16 @@ const EventCreationForm = () => {
   const [ticketTypes, setTicketTypes] = useState<string[]>([]);
   const [currentSection, setCurrentSection] = useState(1); // 1 for Event Details, 2 for Date/Frequency/Location, 3 for Guests/Tickets
 
+
+
+
   useEffect(() => {
     const auth = getAuth();
     const currentUser = auth.currentUser;
     if (currentUser) {
       setUser({
-        name: currentUser.displayName,
-        photoURL: currentUser.photoURL,
+        name: currentUser.displayName ?? null, // Convert null to undefined
+        photoURL: currentUser.photoURL ?? null,
       });
     }
   }, []);

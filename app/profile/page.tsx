@@ -48,6 +48,12 @@ const ProfilePage = () => {
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const logout = () => {
+    const auth = getAuth();
+    auth.signOut().then(() => {
+      router.push('/login');
+    });
+  };
 
   // Fetch user data and update state
   useEffect(() => {
@@ -228,7 +234,7 @@ const ProfilePage = () => {
         }}
       />
       {/* Main Content */}
-      <div className="flex-1 p-6 lg:ml-44 max-w-screen-lg mx-auto">
+      <div className="flex-1 p-6 lg:ml-44 max-w-screen-lg mx-auto mb-14">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Profile</h1>
 
           {/* Toast message */}
@@ -379,7 +385,10 @@ const ProfilePage = () => {
             {saving ? 'Saving...' : 'Save Profile'}
           </button>
         </div>
+        
       </div>
+       {/* Mobile Navigation */}
+       <Mobilenav router={router} logout={logout} />      
     </div>
   );
 };

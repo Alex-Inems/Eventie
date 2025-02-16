@@ -1,11 +1,13 @@
 import { FaUserCircle, FaPlusCircle, FaSignOutAlt } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
-interface MobilenavProps {
-  router: any;
+interface MobileNavProps {
+  router: ReturnType<typeof useRouter>;
   logout: () => void;
 }
 
-const Mobilenav = ({ router, logout }: MobilenavProps) => (
+
+const Mobilenav = ({ router, logout }: MobileNavProps) => (
   <div className="mt-6 border-t-2 border-gray-200 lg:hidden fixed bottom-0 left-0 right-0 bg-white text-gray-500 p-4 flex justify-around items-center shadow-lg">
     <button onClick={() => router.push('/dashboard/organizer')} className="flex flex-col items-center">
       <FaUserCircle />

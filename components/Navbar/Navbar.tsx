@@ -36,7 +36,7 @@ const Navbar = () => {
     <nav className="md:hidden bg-transparent  shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Mobile Menu Button (Hamburger) */}
+          {/* Mobile Menu Button (Hamburger)
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(prev => !prev)}
@@ -44,7 +44,7 @@ const Navbar = () => {
             >
               {isOpen ? '✖' : '☰'}
             </button>
-          </div>
+          </div> */}
 
           {/* Logo and Greeting (Center) */}
           <div className="flex-grow text-center">

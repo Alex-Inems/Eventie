@@ -72,7 +72,7 @@ const OrganizerDashboard = () => {
       const eventsRef = ref(db, 'events');
 
       const unsubscribe = onValue(eventsRef, (snapshot) => {
-        
+        // const organizerId = user.uid;
 
         const allEvents: Event[] = [];
         snapshot.forEach((childSnapshot) => {
@@ -152,7 +152,7 @@ const OrganizerDashboard = () => {
       <Sidebar userName={userName} userProfilePic={userProfilePic} logout={logout} />
 
       {/* Main Content */}
-      <div className="flex-1 p-6 lg:ml-44">
+      <div className="flex-1 p-6 lg:ml-44 mb-14">
         <h1 className="text-xl font-bold mb-4">My Events</h1>
 
         {/* Event Filter Controls */}
