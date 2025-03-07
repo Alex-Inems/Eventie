@@ -3,8 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ref, get } from 'firebase/database';
-import { realtimeDb } from '@/firebaseConfig';  
-import { auth } from '@/firebaseConfig';  
+import { realtimeDb, auth } from '@/firebaseConfig';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Sidebar from '@/components/Sidebar';
+import { getAuth } from 'firebase/auth';
+import Mobilenav from '@/components/Mobilenav';
+import { QRCodeCanvas } from 'qrcode.react';
 
 type Ticket = {
   type: string;
@@ -33,6 +38,9 @@ const TicketsPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const router = useRouter();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
+  const [qrCodeData, setQrCodeData] = useState<string | null>(null);
+  const [profilePic, setProfilePic] = useState<string>('');
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     params
@@ -49,11 +57,12 @@ const TicketsPage = ({ params }: { params: Promise<{ id: string }> }) => {
             tickets: eventData.tickets || [],
           });
         } else {
-          console.error('Event not found');
+          toast.error('Event not found');
         }
       })
       .catch((error) => {
         console.error('Error fetching event details:', error);
+        toast.error('Error fetching event details');
       })
       .finally(() => {
         setLoading(false);
@@ -61,34 +70,44 @@ const TicketsPage = ({ params }: { params: Promise<{ id: string }> }) => {
   }, [params]);
 
   const handlePayment = (ticket: Ticket) => {
-    const user = auth.currentUser;  
+    const user = auth.currentUser;
 
     if (!user) {
-      alert('Please log in to purchase tickets.');
+      toast.info('Please log in to purchase tickets.');
       return;
     }
 
     const paystack = (window as unknown as { PaystackPop: { setup: (config: PaystackConfig) => { openIframe: () => void } } }).PaystackPop;
 
+    const paymentRef = `event_${event?.id}_ticket_${ticket.id}_${Date.now()}`;
     const paymentHandler = paystack.setup({
-      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',  
-      email: user.email || '',  
-      amount: parseInt(ticket.price) * 100,  
-      currency: 'NGN',  
-      ref: `event_${event?.id}_ticket_${ticket.id}`,  
-      callback: (response: { status: string; reference: string }) => {  
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+      email: user.email || '',
+      amount: parseInt(ticket.price) * 100,
+      currency: 'NGN',
+      ref: paymentRef,
+      callback: (response: { status: string; reference: string }) => {
         if (response.status === 'success') {
-          router.push('/dashboard');  
+          setQrCodeData(paymentRef);
+          toast.success('Payment Successful!');
+          router.push('/dashboard/organizer');
         } else {
-          alert('Payment failed. Please try again.');
+          toast.error('Payment failed. Please try again.');
         }
       },
       onClose: () => {
-        alert('Payment process was interrupted');
+        toast.warning('Payment process was interrupted');
       },
     });
 
     paymentHandler.openIframe();
+  };
+
+  const logout = () => {
+    const auth = getAuth();
+    auth.signOut().then(() => {
+      router.push('/auth');
+    });
   };
 
   if (loading) {
@@ -101,13 +120,14 @@ const TicketsPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="max-w-3xl mx-auto py-16 px-6">
+      <Sidebar userName={userName} userProfilePic={profilePic} logout={logout} />
       <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
 
       <div className="mb-6">
         <h3 className="text-2xl font-semibold mb-2">Available Tickets</h3>
         {event.tickets.length > 0 ? (
           event.tickets.map((ticket, idx) => (
-            <div key={idx} className="mb-4 p-4 border rounded-lg">
+            <div key={ticket.id} className="mb-4 p-4 border rounded-lg">
               <h4 className="text-xl font-semibold">{ticket.type}</h4>
               <p className="text-lg text-gray-700">Price: {ticket.price} NGN</p>
               <p className="text-lg text-gray-700">Quantity Available: {ticket.quantity}</p>
@@ -123,6 +143,16 @@ const TicketsPage = ({ params }: { params: Promise<{ id: string }> }) => {
           <p>No tickets available for this event.</p>
         )}
       </div>
+
+      {qrCodeData && (
+        <div className="mt-6">
+          <h3 className="text-2xl font-semibold mb-2">Your Ticket QR Code</h3>
+          <QRCodeCanvas value={qrCodeData} size={200} />
+          <p className="text-lg text-center mt-4">Show this QR code at the event entrance.</p>
+        </div>
+      )}
+
+      <Mobilenav router={router} logout={logout} />
     </div>
   );
 };

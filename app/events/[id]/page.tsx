@@ -24,9 +24,9 @@ type Event = {
 const EventDetailPage = () => {
   const router = useRouter();
   const params = useParams();
+  const [userName, setUserName] = useState('');
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
-  const [userName, setUserName] = useState('');
   const [profilePic, setProfilePic] = useState<string>('');
 
   const fetchEvent = useCallback(async () => {
@@ -139,6 +139,7 @@ const EventDetailPage = () => {
           <FaTicketAlt className="inline mr-2" /> Purchase Tickets
         </button>
       </div>
+
       <Mobilenav 
         router={router}
         logout={logout}

@@ -1,6 +1,7 @@
 // app/payment-result/page.tsx
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'; // useSearchParams to access query params
+import { useRouter } from 'next/navigation';
 
 const PaymentResultPage = () => {
   const searchParams = useSearchParams(); // Get search params from URL
@@ -8,6 +9,7 @@ const PaymentResultPage = () => {
   const reference = searchParams.get('reference');
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
+  const router = useRouter();
   useEffect(() => {
     if (status && reference) {
       verifyPaymentStatus(reference, status); // Verify payment on page load
@@ -58,7 +60,7 @@ const PaymentResultPage = () => {
       {paymentStatus === 'failed' && (
         <button
           className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 mt-8"
-          onClick={() => window.location.href = '/event-page'} // Redirect to event page or retry
+          onClick={() => router.push(`/dashboard/organizer`)} 
         >
           Try Again
         </button>

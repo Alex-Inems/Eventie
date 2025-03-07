@@ -45,11 +45,11 @@ const Auth = () => {
         });
 
         alert('Registration successful');
-        router.push('/'); // Redirect to homepage after registration
+        router.push('/dashboard/organizer'); // Redirect to homepage after registration
       } else {
         await signInWithEmailAndPassword(auth, email, password);
         alert('Login successful');
-        router.push('/'); // Redirect to homepage after login
+        router.push('/dashboard/organizer'); // Redirect to homepage after login
       }
     } catch (error) {
       console.error('Authentication Error', error);
