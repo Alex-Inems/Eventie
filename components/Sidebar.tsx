@@ -1,8 +1,11 @@
-'use client'
+'use client';
 
 import { useRouter } from 'next/navigation';
-import { FaUserCircle, FaPlusCircle, FaSignOutAlt, FaQuestionCircle, FaBell } from 'react-icons/fa';
-import Image from 'next/image';  // Import the Image component
+import { 
+  MdCreate, MdDashboard, MdSupervisorAccount, 
+  MdHelpCenter, MdLogout, MdNotifications 
+} from 'react-icons/md';
+import Image from 'next/image';
 
 interface SidebarProps {
   userName: string;
@@ -11,54 +14,56 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ userName, userProfilePic, logout }: SidebarProps) => {
-  const router = useRouter(); // Use useRouter inside the component
+  const router = useRouter();
 
   return (
-    <div className="w-full lg:w-44 bg-gray-800 text-white hidden lg:h-screen p-4 flex-col lg:block fixed top-0 left-0">
+    <div className="w-full lg:w-44 bg-gray-800 text-white hidden lg:flex flex-col h-screen p-4 fixed top-0 left-0">
       <h1 className="text-xl font-semibold mb-4">Welcome, {userName}</h1>
-      <div className="space-y-3">
+      
+      {/* Navigation Links */}
+      <div className="space-y-3 flex-1">
         <button
           className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
           onClick={() => router.push('/dashboard/organizer')}
         >
-          <FaUserCircle />
+          <MdDashboard />
           <span>My Dashboard</span>
         </button>
         <button
           className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
           onClick={() => router.push('/organizer/create-event')}
         >
-          <FaPlusCircle />
+          <MdCreate />
           <span>Create Event</span>
         </button>
         <button
           className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
           onClick={() => router.push('/profile')}
         >
-          <FaUserCircle />
+          <MdSupervisorAccount />
           <span>Edit Profile</span>
         </button>
         <button
           className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
           onClick={logout}
         >
-          <FaSignOutAlt />
+          <MdLogout />
           <span>Logout</span>
         </button>
       </div>
 
       {/* Bottom Section (Help, Notifications, Profile) */}
-      <div className="mt-auto flex flex-col items-center space-y-4">
+      <div className="space-y-4 mt-auto">
         <button
           className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
           onClick={() => router.push('/help')}
         >
-          <FaQuestionCircle />
+          <MdHelpCenter />
           <span>Help Center</span>
         </button>
 
         <div className="flex items-center space-x-2 text-white cursor-pointer text-sm">
-          <FaBell />
+          <MdNotifications />
           <span>Notifications</span>
         </div>
 
@@ -67,7 +72,7 @@ const Sidebar = ({ userName, userProfilePic, logout }: SidebarProps) => {
             className="w-8 h-8 rounded-full"
             src={userProfilePic || '/default-profile.png'}
             alt="Profile"
-            width={32}   // Set the width and height attributes for optimization
+            width={32}
             height={32}
           />
           <span>{userName}</span>

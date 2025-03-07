@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getDatabase, ref, onValue, set } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { FaPlusCircle, FaFilter, FaSearch, FaCheckCircle } from 'react-icons/fa';
+import { MdCheckCircle, MdCircleNotifications,  MdCreate,  MdFilter, MdFolderOpen, MdOutlineCreate, MdSearch } from 'react-icons/md';
 import Sidebar from '@/components/Sidebar';
 import Mobilenav from '@/components/Mobilenav';
 import Image from "next/image";
@@ -162,7 +162,7 @@ const OrganizerDashboard = () => {
               className=" shadow-lg flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md  transition text-sm"
               onClick={createEvent}
             >
-              <FaPlusCircle />
+              <MdCreate />
               Create New Event
             </button>
 
@@ -170,7 +170,7 @@ const OrganizerDashboard = () => {
               className="shadow-lg flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md  transition text-sm"
               onClick={toggleEventView}
             >
-              <FaFilter />
+              < MdFolderOpen />
               {showCreatedEvents ? 'Show Upcoming Events' : 'Show Created Events'}
             </button>
           </div>
@@ -183,7 +183,7 @@ const OrganizerDashboard = () => {
         <div className="mb-6 w-full max-w-md mx-auto">
           <div className="relative">
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <FaSearch />
+              <MdSearch />
             </div>
             <input
               type="text"
@@ -207,7 +207,7 @@ const OrganizerDashboard = () => {
   <div>
             <div className="flex items-center space-x-2">
               <span className="text-xl font-semibold">{userName}</span>
-              {isVerified && <span className='text-blue-700'><FaCheckCircle /></span>}
+              {isVerified && <span className='text-blue-700'><MdCheckCircle /></span>}
             </div>
             {/* Bio section */}
             <p className="text-sm text-gray-600 mt-2">{userBio}</p>
@@ -247,8 +247,7 @@ const OrganizerDashboard = () => {
                   {!showCreatedEvents && (
                     <button
                       className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-green-700 text-xs"
-                      onClick={() => registerForEvent(event.id)}
-                    >
+                      onClick={() => router.push(`/events/${event.id}`)}                  >
                       Register
                     </button>
                   )}

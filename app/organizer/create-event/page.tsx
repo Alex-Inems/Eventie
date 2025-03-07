@@ -8,7 +8,7 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import { getAuth } from 'firebase/auth';
 import Sidebar from '@/components/Sidebar';
 import Mobilenav from '@/components/Mobilenav';
-import { AiOutlineFileImage } from 'react-icons/ai';
+import { MdFileUpload} from 'react-icons/md';
 import Image from 'next/image';
 
 const EventCreationForm = () => {
@@ -200,7 +200,7 @@ const EventCreationForm = () => {
               <div>
                 <label className="block text-lg font-medium text-gray-700">Upload Image</label>
                 <div className="flex items-center gap-3 border p-2 rounded-md">
-                  <AiOutlineFileImage />
+                  <MdFileUpload />
                   <input type="file" accept="image/*" onChange={handleFileChange} className="w-full" />
                 </div>
               </div>

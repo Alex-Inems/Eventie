@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
-import { MdEvent, MdPayment } from 'react-icons/md';
-import { FaUserFriends } from 'react-icons/fa';
+import { MdEvent,  MdFace3, MdPayment } from 'react-icons/md';
+
 
 const HomePage: FC = () => {
   return (
@@ -38,7 +38,7 @@ const HomePage: FC = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { icon: <MdEvent />, title: "Seamless Management", desc: "Create and manage events effortlessly." },
-            { icon: <FaUserFriends />, title: "Personalized Discovery", desc: "Find events tailored to your interests." },
+            { icon: <MdFace3 />, title: "Personalized Discovery", desc: "Find events tailored to your interests." },
             { icon: <MdPayment />, title: "Secure Payments", desc: "Enjoy safe and easy transactions." },
           ].map((feature, idx) => (
             <div key={idx} className="bg-white shadow-lg rounded-lg p-6 text-center">
@@ -86,7 +86,7 @@ const HomePage: FC = () => {
           ].map((testimonial, idx) => (
             <div key={idx} className="bg-white shadow-lg rounded-lg p-6">
               <p className="text-gray-600 italic">“{testimonial}”</p>
-              <p className="mt-4 font-semibold">— User {idx + 1}</p>
+              <p className="mt-4 font-semibold">—  {idx + 1}</p>
             </div>
           ))}
         </div>
