@@ -58,7 +58,7 @@ const EventDetailPage = () => {
   const logout = () => {
     const auth = getAuth();
     auth.signOut().then(() => {
-      router.push('/login');
+      router.push('/auth');
     });
   };
 

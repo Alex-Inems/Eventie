@@ -17,7 +17,7 @@ const HelpCenterPage = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push('/login');
+      router.push('/auth');
       return;
     }
     setUserName(user.displayName || 'Organizer');
@@ -53,7 +53,7 @@ const HelpCenterPage = () => {
         userName={userName}
         userProfilePic={profilePic}
         logout={() => {
-          auth.signOut().then(() => router.push('/login'));
+          auth.signOut().then(() => router.push('/auth'));
         }}
       />
 
@@ -113,7 +113,7 @@ const HelpCenterPage = () => {
         logout={() => {
           const auth = getAuth();
           auth.signOut().then(() => {
-            router.push('/login');
+            router.push('/auth');
           });
         }}
       />

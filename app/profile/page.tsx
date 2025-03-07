@@ -51,14 +51,14 @@ const ProfilePage = () => {
   const logout = () => {
     const auth = getAuth();
     auth.signOut().then(() => {
-      router.push('/login');
+      router.push('/auth');
     });
   };
 
   // Fetch user data and update state
   useEffect(() => {
     if (!user) {
-      router.push('/login');
+      router.push('/auth');
       return;
     }
 
@@ -229,7 +229,7 @@ const ProfilePage = () => {
         logout={() => {
           const auth = getAuth();
           auth.signOut().then(() => {
-            router.push('/login');
+            router.push('/auth');
           });
         }}
       />

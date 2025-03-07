@@ -35,7 +35,7 @@ const OrganizerDashboard = () => {
       const user = auth.currentUser;
 
       if (!user) {
-        router.push('/login');
+        router.push('/auth');
         return;
       }
 
@@ -64,7 +64,7 @@ const OrganizerDashboard = () => {
       const user = auth.currentUser;
 
       if (!user) {
-        router.push('/login');
+        router.push('/auth');
         return;
       }
 
@@ -109,32 +109,11 @@ const OrganizerDashboard = () => {
   const logout = () => {
     const auth = getAuth();
     auth.signOut().then(() => {
-      router.push('/login');
+      router.push('/auth');
     });
   };
 
-  const registerForEvent = (eventId: string) => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-
-    const db = getDatabase();
-    const eventRef = ref(db, `events/${eventId}/attendees/${user.uid}`);
-
-    set(eventRef, { userId: user.uid, name: user.displayName, email: user.email })
-      .then(() => {
-        alert('You have successfully registered for the event!');
-      })
-      .catch((error) => {
-        console.error('Registration failed:', error);
-        alert('Registration failed. Try again later.');
-      });
-  };
-
+ 
   const filteredEvents = events.filter((event) => {
     const isMatchingSearchQuery = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                                   event.eventDate.toLowerCase().includes(searchQuery.toLowerCase());
