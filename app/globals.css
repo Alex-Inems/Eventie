@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+@keyframes sliding-bg {
+  0% { background-image: url('/images/slide.jpg'); }
+  33% { background-image: url('/images/slide(2).jpg'); }
+  66% { background-image: url('/images/slide(3).jpg'); }
+  100% { background-image: url('/images/slide4.jpg'); }
+}
+
+.animate-sliding-bg {
+  animation: sliding-bg 15s infinite ease-in-out;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 html, body {
   overflow-x: hidden;
 }

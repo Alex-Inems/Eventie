@@ -26,7 +26,7 @@ export default function RootLayout({
       
       <body>
         <AuthProvider>
-          <Navbar />
+          {/* <Navbar /> */}
           {children} {/* Render child components/pages here */}
         </AuthProvider>
       </body>
