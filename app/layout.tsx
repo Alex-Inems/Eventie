@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Script from "next/script"; // Import Next.js Script component
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthProvider"; // Ensure correct path
-import Navbar from "@/components/Navbar/Navbar";
+
 
 export const metadata: Metadata = {
   title: "Uplift",
@@ -26,7 +26,7 @@ export default function RootLayout({
       
       <body>
         <AuthProvider>
-          {/* <Navbar /> */}
+          
           {children} {/* Render child components/pages here */}
         </AuthProvider>
       </body>

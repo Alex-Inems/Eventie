@@ -1,3 +1,4 @@
+'use client'
 // app/payment-result/page.tsx
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'; // useSearchParams to access query params

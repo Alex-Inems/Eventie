@@ -3,25 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { getDatabase, ref, onValue } from "firebase/database";
-import Image from "next/image";
-import Link from "next/link";
-import { MdEvent, MdFace3, MdPayment } from "react-icons/md";
 import { app } from "@/firebaseConfig"; // Ensure Firebase is initialized correctly
 
-// Define Event interface
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl?: string;
-  date: string;
-}
-
 const HomePage = () => {
-  const [events, setEvents] = useState<Event[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -34,43 +21,24 @@ const HomePage = () => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const db = getDatabase(app);
-    const eventsRef = ref(db, "events");
-
-    const unsubscribe = onValue(eventsRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const eventList: Event[] = Object.keys(data).map((key) => ({
-          id: key,
-          title: data[key].title || "Untitled Event",
-          description: data[key].description || "No description available",
-          imageUrl: data[key].imageUrl,
-          date: data[key].date || new Date().toISOString(),
-        }));
-        setEvents(eventList);
-      } else {
-        setEvents([]);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
   if (loading) return null; // Prevents UI flickering during loading
 
-  // Click handlers for buttons
+  // Navigate function for buttons
   const handleNavigate = (path: string) => {
-    if (currentUser) {
-      router.push(path);
-    } else {
-      router.push("/auth");
+    router.push(currentUser ? path : "/auth");
+  };
+
+  // Handle search and redirect
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/events?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
   return (
     <div>
-      {/* Hero Section with Sliding Background */}
+      {/* Hero Section */}
       <div className="relative h-screen overflow-hidden text-white flex flex-col justify-center items-center text-center">
         {/* Background Sliding Effect */}
         <div className="absolute inset-0 bg-cover bg-center animate-sliding-bg"></div>
@@ -84,14 +52,23 @@ const HomePage = () => {
             Your all-in-one platform for effortless event management and discovery.
           </p>
 
-          {/* Search Bar */}
-          <div className="flex justify-center gap-4 mb-8">
+          {/* Search Bar with Redirection */}
+          <form onSubmit={handleSearch} className="flex justify-center gap-4 mb-8">
             <input
               type="text"
-              className="px-6 py-3 rounded-lg shadow-md w-1/2 max-w-xl"
-              placeholder="Search for events, organizers, or locations"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for events..."
+              className="px-6 py-3 rounded-lg shadow-md w-1/2 max-w-xl text-black"
             />
-          </div>
+           <button
+  type="submit"
+  className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300 shadow-lg"
+>
+  🔍
+</button>
+
+          </form>
 
           <div className="flex justify-center gap-4">
             <button
@@ -109,8 +86,6 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-
-    
     </div>
   );
 };
