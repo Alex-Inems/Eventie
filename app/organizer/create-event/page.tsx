@@ -8,12 +8,12 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import { getAuth } from 'firebase/auth';
 import Sidebar from '@/components/Sidebar';
 import Mobilenav from '@/components/Mobilenav';
-import { MdFileUpload} from 'react-icons/md';
+import { MdFileUpload } from 'react-icons/md';
 import Image from 'next/image';
 
 const EventCreationForm = () => {
   const router = useRouter();
-  
+
   const [user, setUser] = useState<{ name: string | null; photoURL: string | null } | undefined>(undefined);
 
   const [title, setTitle] = useState('');
@@ -92,11 +92,11 @@ const EventCreationForm = () => {
 
     try {
       const db = getDatabase();
-      const newEventId = Date.now().toString();
+      const newEventId = Date.now();
       const newEvent = {
         title,
         description,
-        date: new Date(date).toISOString(),
+        date: new Date(date).toISOString(), // Converts to "YYYY-MM-DDTHH:mm:ss.sssZ"
         location,
         imageUrl,
         createdBy: hostName,
@@ -115,25 +115,48 @@ const EventCreationForm = () => {
   // Provide fallback for user name and photo URL
   const userName = user?.name || 'Guest';
   const userProfilePic = user?.photoURL || '/default-avatar.png';
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [speakers, setSpeakers] = useState<{ name: string; bio: string; photo: File | null }[]>([]);
+
+  const addSpeaker = () => {
+    setSpeakers([...speakers, { name: '', bio: '', photo: null }]);
+  };
+
+  const removeSpeaker = (index: number) => {
+    setSpeakers(speakers.filter((_, i) => i !== index));
+  };
+
+  const handleSpeakerChange = (index: number, field: 'name' | 'bio', value: string) => {
+    const updatedSpeakers = [...speakers];
+    updatedSpeakers[index][field] = value;
+    setSpeakers(updatedSpeakers);
+  };
+
+  const handleSpeakerPhotoChange = (index: number, file: File | null) => {
+    const updatedSpeakers = [...speakers];
+    updatedSpeakers[index].photo = file;
+    setSpeakers(updatedSpeakers);
+  };
 
   return (
     <div className="flex lg:bg-gray-900  mb-12">
-      <Sidebar userName="Organizer" userProfilePic="" logout={() => {}} />
+      <Sidebar userName="Organizer" userProfilePic="" logout={() => { }} />
 
       <div className="flex-1 p-6 lg:p-8 bg-white lg:mr-24 shadow-lg rounded-lg mx-auto mt-10 max-w-4xl w-full">
-        <Mobilenav router={router} logout={() => {}} />
+        <Mobilenav router={router} logout={() => { }} />
 
         {user && (
           <div className="flex items-center mb-8">
-          <Image
-            src={userProfilePic}
-            alt="User"
-            width={48}
-            height={48}
-            className="w-12 h-12 rounded-full mr-4"
-          />
-          <h2 className="text-2xl font-bold text-gray-800">Welcome, {userName}!</h2>
-        </div>
+            <Image
+              src={userProfilePic}
+              alt="User"
+              width={48}
+              height={48}
+              className="w-12 h-12 rounded-full mr-4"
+            />
+            <h2 className="text-2xl font-bold text-gray-800">Welcome, {userName}!</h2>
+          </div>
         )}
 
         <h3 className="text-2xl font-semibold text-gray-800 mb-6">Create Your Event</h3>
@@ -175,27 +198,6 @@ const EventCreationForm = () => {
                 />
               </div>
 
-              <div className="mb-6">
-                <label className="block text-lg font-medium text-gray-700 mb-2">Event Date</label>
-                <input
-                  type="datetime-local"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500"
-                  required
-                />
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-lg text-black font-medium  mb-2">Location</label>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500"
-                  required
-                />
-              </div>
 
               <div>
                 <label className="block text-lg font-medium text-gray-700">Upload Image</label>
@@ -217,19 +219,44 @@ const EventCreationForm = () => {
           {/* Date, Frequency, and Location Section */}
           {currentSection === 2 && (
             <>
-              <div className="mb-6">
-                <label className="block text-lg font-medium text-gray-700 mb-2">Event Date</label>
-                <input
-                  type="datetime-local"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500"
-                  required
-                />
-              </div>
+             <div className="mb-6">
+  <label className="block text-lg font-medium text-gray-700 mb-2">
+    Event Date
+  </label>
+  <input
+    type="date"
+    value={date}
+    onChange={(e) => setDate(e.target.value)}
+    className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500"
+    required
+  />
+</div>
+
 
               <div className="mb-6">
-                <label className="block text-lg font-medium text-gray-700 mb-2">Location</label>
+                <div className="mb-6">
+                  <label className="block text-lg font-medium text-gray-700 mb-2">Start Time</label>
+                  <input
+                    type="time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500"
+                    required
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <label className="block text-lg font-medium text-gray-700 mb-2">End Time</label>
+                  <input
+                    type="time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500"
+                    required
+                  />
+                </div>
+
+                <label className="block text-lg text-black font-medium  mb-2">Location</label>
                 <input
                   type="text"
                   value={location}
@@ -261,19 +288,36 @@ const EventCreationForm = () => {
           {/* Guests and Ticket Types Section */}
           {currentSection === 3 && (
             <>
+              <h4 className="text-xl font-semibold text-gray-700 mb-4">Speakers</h4>
+
+              {speakers.map((speaker, index) => (
+                <div key={index} className="mb-6">
+                  <input
+                    type="text"
+                    placeholder="Speaker Name"
+                    value={speaker.name}
+                    onChange={(e) => handleSpeakerChange(index, 'name', e.target.value)}
+                    className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500"
+                    required
+                  />
+
+                  <textarea
+                    placeholder="Speaker Bio"
+                    value={speaker.bio}
+                    onChange={(e) => handleSpeakerChange(index, 'bio', e.target.value)}
+                    className="w-full py-2 px-4 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-500 mt-2"
+                    required
+                  />
+
+                  <input type="file" onChange={(e) => handleSpeakerPhotoChange(index, e.target.files?.[0] || null)} />
+
+                  <button type="button" onClick={() => removeSpeaker(index)}>Remove</button>
+                </div>
+              ))}
+
+              <button type="button" onClick={addSpeaker} className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded">Add Speaker</button>
+
               <h4 className="text-xl font-semibold text-gray-700 mb-4">Ticket Details</h4>
-              <div className="flex flex-wrap gap-4 mb-6">
-                {['Free', 'Paid', 'VIP'].map((type) => (
-                  <div key={type} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      value={type}
-                      onChange={() => setTicketTypes((prev) => [...prev, type])}
-                    />
-                    <span>{type}</span>
-                  </div>
-                ))}
-              </div>
 
               <div className="flex flex-col gap-4">
                 {tickets.map((ticket, index) => (

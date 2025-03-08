@@ -1,18 +1,72 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { FC } from 'react';
-import { MdEvent,  MdFace3, MdPayment } from 'react-icons/md';
+"use client";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
+import Image from "next/image";
+import Link from "next/link";
+import { MdEvent, MdFace3, MdPayment } from "react-icons/md";
+import { app } from "@/firebaseConfig"; // Ensure Firebase is initialized correctly
 
-const HomePage: FC = () => {
+const HomePage = () => {
+  const [events, setEvents] = useState<any[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user); // Fixes TypeScript error
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const db = getDatabase(app);
+    const eventsRef = ref(db, "events");
+
+    const unsubscribe = onValue(eventsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const eventList = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setEvents(eventList);
+      } else {
+        setEvents([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) return null; // Prevents UI flickering during loading
+
+  // Click handlers for buttons
+  const handleNavigate = (path: string) => {
+    if (currentUser) {
+      router.push(path);
+    } else {
+      router.push("/auth");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      
       {/* Hero Section */}
       <header className="bg-gradient-to-r from-purple-600 to-teal-500 text-white py-20 px-6 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">Discover. Organize. Experience.</h1>
-        <p className="text-lg md:text-xl mb-8">Your all-in-one platform for effortless event management and discovery.</p>
-        
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          Discover. Organize. Experience.
+        </h1>
+        <p className="text-lg md:text-xl mb-8">
+          Your all-in-one platform for effortless event management and discovery.
+        </p>
+
         {/* Search Bar */}
         <div className="flex justify-center gap-4 mb-8">
           <input
@@ -23,12 +77,18 @@ const HomePage: FC = () => {
         </div>
 
         <div className="flex justify-center gap-4">
-          <Link href="/events" className="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+          <button
+            onClick={() => handleNavigate("/events")}
+            className="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
+          >
             Discover Events
-          </Link>
-          <Link href="/organizer" className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+          </button>
+          <button
+            onClick={() => handleNavigate("/dashboard/organizer")}
+            className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
+          >
             Start Organizing
-          </Link>
+          </button>
         </div>
       </header>
 
@@ -54,41 +114,33 @@ const HomePage: FC = () => {
       <section className="bg-gray-100 py-16 px-6">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">Trending Events</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {[...Array(6)].map((_, idx) => (
-            <div key={idx} className="bg-white shadow-md rounded-lg overflow-hidden">
-              <Image 
-                src={`/images/event-${idx + 1}.jpg`} 
-                alt={`Event ${idx + 1}`} 
-                width={400} 
-                height={200} 
-                className="w-full h-48 object-cover" 
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold">Event Title {idx + 1}</h3>
-                <p className="text-gray-600">Event details and description go here.</p>
-                <button className="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
-                  Learn More
-                </button>
+          {events.length > 0 ? (
+            events.map((event) => (
+              <div
+                key={event.id}
+                className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
+                onClick={() => handleNavigate(`/events/${event.id}`)}
+              >
+                <Image
+                  src={event.imageUrl || "/images/default-event.jpg"}
+                  alt={event.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold">{event.title}</h3>
+                  <p className="text-gray-600">{event.description}</p>
+                  <p className="text-sm text-gray-500">{new Date(event.date).toLocaleString()}</p>
+                  <button className="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                    Learn More
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-16 px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">What Our Users Say</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            "Eventify made organizing my events so much simpler!",
-            "I discovered amazing events I wouldn’t have known about otherwise.",
-            "The ticketing system is seamless and secure. Highly recommend!",
-          ].map((testimonial, idx) => (
-            <div key={idx} className="bg-white shadow-lg rounded-lg p-6">
-              <p className="text-gray-600 italic">“{testimonial}”</p>
-              <p className="mt-4 font-semibold">—  {idx + 1}</p>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center text-gray-600">No events available.</p>
+          )}
         </div>
       </section>
 

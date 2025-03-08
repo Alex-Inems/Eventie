@@ -13,9 +13,10 @@ type Event = {
   title: string;
   organizerId: string;
   totalTicketsSold?: number;
-  eventDate: string;
+  date: string;
   imageUrl: string;
   description: string;
+  
 };
 
 const OrganizerDashboard = () => {
@@ -62,38 +63,42 @@ const OrganizerDashboard = () => {
     const fetchEvents = () => {
       const auth = getAuth();
       const user = auth.currentUser;
-
+  
       if (!user) {
         router.push('/auth');
         return;
       }
-
+      
       const db = getDatabase();
-      const eventsRef = ref(db, 'events');
-
+      const eventsRef = ref(db, 'events'); // Fetch all events
+  
       const unsubscribe = onValue(eventsRef, (snapshot) => {
-        // const organizerId = user.uid;
-
         const allEvents: Event[] = [];
         snapshot.forEach((childSnapshot) => {
-          const event = childSnapshot.val() as Omit<Event, 'id'>;
+          const eventData = childSnapshot.val(); // Get event object
           const eventWithId = {
-            id: childSnapshot.key ?? '',
-            ...event,
+            id: childSnapshot.key ?? '', // Store event ID
+            title: eventData.title,
+            organizerId: eventData.organizerId,
+            totalTicketsSold: eventData.totalTicketsSold || 0,
+            date: eventData.date || "", // Ensure `date` is assigned properly
+            imageUrl: eventData.imageUrl || "/default-event-image.jpg",
+            description: eventData.description || "No description available",
           };
           allEvents.push(eventWithId);
         });
-
+  
+        console.log("Fetched events:", allEvents); // Debugging
         setEvents(allEvents);
         setLoading(false);
       });
-
+  
       return () => unsubscribe();
     };
-
+  
     fetchEvents();
   }, [router]);
-
+  
   const viewAttendees = (eventId: string) => {
     router.push(`/dashboard/organizer/events/${eventId}/attendees`);
   };
@@ -116,7 +121,7 @@ const OrganizerDashboard = () => {
  
   const filteredEvents = events.filter((event) => {
     const isMatchingSearchQuery = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                  event.eventDate.toLowerCase().includes(searchQuery.toLowerCase());
+                                  event.date.toLowerCase().includes(searchQuery.toLowerCase());
 
     const isCreatedByUser = showCreatedEvents ? event.organizerId === getAuth().currentUser?.uid : true;
 
@@ -124,7 +129,7 @@ const OrganizerDashboard = () => {
   });
 
   if (loading) return <div className="flex justify-center items-center h-full"><div className="loader">Loading...</div></div>;
-
+  
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left Sidebar */}
@@ -208,7 +213,16 @@ const OrganizerDashboard = () => {
                   <div>
                     <h2 className="text-lg font-semibold">{event.title}</h2>
                     <p className="text-gray-600 text-sm">Total Tickets Sold: {event.totalTicketsSold || 0}</p>
-                    <p className="text-gray-400 text-xs">{new Date(event.eventDate).toLocaleDateString()}</p>
+                    
+                    <p className="text-lg text-gray-600 text-center mb-4">
+  
+  {event.date ? new Date(event.date).toLocaleString() : "Date not available"}
+</p>
+
+
+  
+
+
                     <p className="text-gray-500 text-xs mt-2">{event.description}</p>
                   </div>
                 </div>
