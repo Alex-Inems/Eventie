@@ -23,7 +23,7 @@ const EventCreationForm = () => {
   const [image, setImage] = useState<File | null>(null);
   const [hostName, setHostName] = useState('');
   const [tickets, setTickets] = useState<{ type: string; price: string; quantity: string }[]>([{ type: '', price: '', quantity: '' }]);
-  const [ticketTypes, setTicketTypes] = useState<string[]>([]);
+  
   const [currentSection, setCurrentSection] = useState(1); // 1 for Event Details, 2 for Date/Frequency/Location, 3 for Guests/Tickets
 
 
@@ -138,6 +138,12 @@ const EventCreationForm = () => {
     updatedSpeakers[index].photo = file;
     setSpeakers(updatedSpeakers);
   };
+
+  const [ticketTypes, setTicketTypes] = useState<string[]>([]);
+
+useEffect(() => {
+  setTicketTypes(tickets.map(ticket => ticket.type));
+}, [tickets]);
 
   return (
     <div className="flex lg:bg-gray-900  mb-12">

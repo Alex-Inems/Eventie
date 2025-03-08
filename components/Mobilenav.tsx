@@ -1,4 +1,4 @@
-import { MdArrowCircleUp, MdCreate, MdDashboard, MdEvent,  MdFace3, MdLogout, MdPayment, MdSupervisedUserCircle, MdSupervisorAccount } from 'react-icons/md';
+import { MdCreate, MdDashboard, MdLogout,  MdSupervisorAccount } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 
 interface MobileNavProps {

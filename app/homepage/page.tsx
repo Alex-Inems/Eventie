@@ -9,8 +9,17 @@ import Link from "next/link";
 import { MdEvent, MdFace3, MdPayment } from "react-icons/md";
 import { app } from "@/firebaseConfig"; // Ensure Firebase is initialized correctly
 
+// Define Event interface
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  date: string;
+}
+
 const HomePage = () => {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -18,7 +27,7 @@ const HomePage = () => {
   useEffect(() => {
     const auth = getAuth(app);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user); // Fixes TypeScript error
+      setCurrentUser(user);
       setLoading(false);
     });
 
@@ -32,9 +41,12 @@ const HomePage = () => {
     const unsubscribe = onValue(eventsRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const eventList = Object.keys(data).map((key) => ({
+        const eventList: Event[] = Object.keys(data).map((key) => ({
           id: key,
-          ...data[key],
+          title: data[key].title || "Untitled Event",
+          description: data[key].description || "No description available",
+          imageUrl: data[key].imageUrl,
+          date: data[key].date || new Date().toISOString(),
         }));
         setEvents(eventList);
       } else {

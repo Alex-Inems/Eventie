@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaMapMarkerAlt, FaMicrophone, FaCalendarAlt, FaTicketAlt } from 'react-icons/fa';
 
 import Sidebar from '@/components/Sidebar';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import Mobilenav from '@/components/Mobilenav';
 
 type Event = {
@@ -24,11 +24,25 @@ type Event = {
 const EventDetailPage = () => {
   const router = useRouter();
   const params = useParams();
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState('Guest');
+  const [profilePic, setProfilePic] = useState('/images/default-profile.png');
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
-  const [profilePic, setProfilePic] = useState<string>('');
 
+  // Fetch authenticated user details
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      if (user) {
+        setUserName(user.displayName || 'Guest');
+        setProfilePic(user.photoURL || '/images/default-profile.png');
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup function to prevent memory leaks
+  }, []);
+
+  // Fetch event details from Firebase
   const fetchEvent = useCallback(async () => {
     try {
       if (!params?.id) return;
@@ -55,6 +69,7 @@ const EventDetailPage = () => {
     fetchEvent();
   }, [fetchEvent]);
 
+  // Logout function
   const logout = () => {
     const auth = getAuth();
     auth.signOut().then(() => {

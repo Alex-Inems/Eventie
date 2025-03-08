@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getDatabase, ref, onValue, set } from 'firebase/database';
+import { getDatabase, ref, onValue} from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { MdCheckCircle, MdCircleNotifications,  MdCreate,  MdFilter, MdFolderOpen, MdOutlineCreate, MdSearch } from 'react-icons/md';
+import { MdCheckCircle,  MdCreate,  MdFolderOpen,  MdSearch } from 'react-icons/md';
 import Sidebar from '@/components/Sidebar';
 import Mobilenav from '@/components/Mobilenav';
 import Image from "next/image";
@@ -231,7 +231,8 @@ const OrganizerDashboard = () => {
                   {showCreatedEvents && event.organizerId === getAuth().currentUser?.uid && (
                    <button
                    className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-blue-700 text-xs"
-                   onClick={() => router.push(`/events/${event.id}/attendees`)}
+                   onClick={() => viewAttendees(event.id)}
+
                  >
                    View Attendees
                  </button>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { ref, get, update, push } from 'firebase/database';
 import { realtimeDb, auth } from '@/firebaseConfig';
 import { toast } from 'react-toastify';
@@ -32,7 +32,7 @@ type PaystackConfig = {
 };
 
 const TicketsPage = ({ params }: { params: Promise<{ id: string }> }) => {
-  const router = useRouter();
+
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [qrData, setQrData] = useState<string | null>(null);

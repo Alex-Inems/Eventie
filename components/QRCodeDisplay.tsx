@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { ref, get } from 'firebase/database';
 import { realtimeDb } from '@/firebaseConfig';
 
@@ -24,7 +25,7 @@ const QRCodeDisplay = ({ qrId }: Props) => {
         } else {
           setError('No QR Code Found');
         }
-      } catch (err) {
+      } catch {
         setError('Error fetching QR code');
       } finally {
         setLoading(false);
@@ -41,7 +42,13 @@ const QRCodeDisplay = ({ qrId }: Props) => {
     <div className="text-center">
       <h3 className="text-lg font-semibold mb-4">Your Ticket QR Code</h3>
       {qrData ? (
-        <img src={qrData} alt="QR Code" className="mx-auto w-40 h-40" />
+        <Image
+          src={qrData}
+          alt="QR Code"
+          width={160} // Adjust size as needed
+          height={160}
+          className="mx-auto"
+        />
       ) : (
         <div>No QR Code Available</div>
       )}
