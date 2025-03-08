@@ -5,8 +5,22 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { auth } from '../../firebaseConfig';
 import { signOut } from 'firebase/auth';
-import { links } from '@/types/commonTypes';
 import Image from 'next/image';
+
+// Define the structure of navigation links
+interface NavLink {
+  name: string;
+  href: string;
+  icon?: React.ElementType;
+  dropdownItems?: { name: string; href: string; icon?: React.ElementType }[];
+}
+
+// Define your navigation links here
+const links: NavLink[] = [
+  { name: 'Home', href: '/' },
+  { name: 'Events', href: '/events' },
+  { name: 'Profile', href: '/profile' },
+];
 
 const Navbar = () => {
   const { currentUser } = useAuth();
@@ -29,30 +43,23 @@ const Navbar = () => {
   }, []);
 
   const toggleDropdown = (name: string) => {
-    setDropdownOpen(prev => (prev === name ? null : name)); // Toggle dropdown
+    setDropdownOpen((prev) => (prev === name ? null : name));
   };
 
   return (
-    <nav className="md:hidden bg-transparent  shadow-lg">
+    <nav className="md:hidden bg-transparent shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Mobile Menu Button (Hamburger)
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(prev => !prev)}
-              className="text-gray-800 focus:outline-none"
-            >
-              {isOpen ? '✖' : '☰'}
-            </button>
-          </div> */}
-
           {/* Logo and Greeting (Center) */}
           <div className="flex-grow text-center">
-            <Link href="/" className="text-xl font-bold text-gray-500 transition duration-300 hover:opacity-80">
+            <Link
+              href="/"
+              className="text-xl font-bold text-gray-500 transition duration-300 hover:opacity-80"
+            >
               Eventify
             </Link>
             {currentUser && (
-              <div className="text-black font-bold ">
+              <div className="text-black font-bold">
                 Hi, {currentUser.displayName || 'User'}
               </div>
             )}
@@ -60,17 +67,14 @@ const Navbar = () => {
 
           {/* Notification Icon (Right) */}
           <div className="flex items-center space-x-4">
-            <button className="text-white">
-              {/* Replace with your notification icon */}
-              🔔
-            </button>
+            <button className="text-white">🔔</button>
           </div>
         </div>
       </div>
 
       {/* Mobile Navigation (Visible only on mobile) */}
       {isOpen && (
-        <div className="md:hidden">
+        <div className="md:hidden bg-transparent backdrop-blur-md shadow-md">
           <div className="flex flex-col space-y-4 py-4 px-2">
             {links.map((link) => (
               <div key={link.name}>
