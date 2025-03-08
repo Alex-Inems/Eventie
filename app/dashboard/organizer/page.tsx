@@ -215,12 +215,12 @@ const OrganizerDashboard = () => {
 
                 <div className="mt-4 flex justify-between items-center">
                   {showCreatedEvents && event.organizerId === getAuth().currentUser?.uid && (
-                    <button
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-blue-700 text-xs"
-                      onClick={() => viewAttendees(event.id)}
-                    >
-                      View Attendees
-                    </button>
+                   <button
+                   className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-blue-700 text-xs"
+                   onClick={() => router.push(`/events/${event.id}/attendees`)}
+                 >
+                   View Attendees
+                 </button>
                   )}
 
                   {!showCreatedEvents && (
