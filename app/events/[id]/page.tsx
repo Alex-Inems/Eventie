@@ -25,7 +25,7 @@ const EventDetailPage = () => {
   const router = useRouter();
   const params = useParams();
   const [userName, setUserName] = useState('Guest');
-  const [profilePic, setProfilePic] = useState('/images/default-profile.png');
+  const [profilePic, setProfilePic] = useState('/images/default-profile.jpeg');
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ const EventDetailPage = () => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       if (user) {
         setUserName(user.displayName || 'Guest');
-        setProfilePic(user.photoURL || '/images/default-profile.png');
+        setProfilePic(user.photoURL || '/images/default-profile.jpeg');
       }
     });
 
@@ -77,11 +77,11 @@ const EventDetailPage = () => {
     });
   };
 
+  // Centered milky spinner while loading
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen" aria-live="polite">
-        <div className="animate-spin w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full"></div>
-        <p className="mt-4 text-lg text-gray-700">Loading event details...</p>
+      <div className="flex justify-center items-center h-screen bg-white/30 backdrop-blur-md">
+        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -105,7 +105,7 @@ const EventDetailPage = () => {
 
   return (
     <div className="relative min-h-screen bg-gray-50">
-      <Sidebar userName={userName} userProfilePic={profilePic} logout={logout} />
+      <Sidebar/>
       <div className="max-w-3xl mx-auto py-16 px-6">
         <h1 className="text-4xl font-bold mb-4 text-center text-blue-700 animate-fadeIn">
           {event.title}
@@ -155,10 +155,7 @@ const EventDetailPage = () => {
         </button>
       </div>
 
-      <Mobilenav 
-        router={router}
-        logout={logout}
-      />
+      <Mobilenav/>
     </div>
   );
 };

@@ -1,22 +1,22 @@
-// context/AuthContext.tsx
-'use client';
+"use client";
 
-import { createContext, useContext } from 'react';
-import { User } from 'firebase/auth'; // Import Firebase's user-related types
+import { createContext, useContext } from "react";
+import { User } from "firebase/auth";
 
 // Define the context interface
 interface AuthContextProps {
   currentUser: User | null;
+  logout: () => Promise<void>;
 }
 
-// Create the context with default value
-const AuthContext = createContext<AuthContextProps | undefined>(undefined); // Initialize with undefined
+// Create the context
+const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-// Custom hook to use AuthContext
+// Custom hook for consuming auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

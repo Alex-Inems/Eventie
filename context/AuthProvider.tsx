@@ -1,32 +1,29 @@
-// context/AuthProvider.tsx
-'use client';
+"use client";
 
-import { ReactNode, useEffect, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth'; // Import Firebase's user-related types
-import { auth } from '../firebaseConfig'; // Adjust the path if needed
-import AuthContext from './AuthContext'; // Import the AuthContext
+import { ReactNode, useEffect, useState } from "react";
+import { onAuthStateChanged, User, signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig"; // Adjust path if needed
+import AuthContext from "./AuthContext"; // Adjust path if needed
 
-// AuthProvider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true); // Loading state to avoid flickers
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("Auth state changed:", user); // Log user info
-      setCurrentUser(user); // Set user directly, as it will be null if not authenticated
-      setLoading(false); // Stop loading once auth state is confirmed
+      console.log("Auth state changed:", user);
+      setCurrentUser(user);
     });
 
-    return () => unsubscribe(); // Cleanup the listener on unmount
+    return () => unsubscribe();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>; // Render a loader until Firebase confirms auth state
-  }
+  // Logout function
+  const logout = async () => {
+    await signOut(auth);
+  };
 
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

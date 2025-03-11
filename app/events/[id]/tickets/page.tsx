@@ -131,7 +131,7 @@ const TicketsPage = ({ params }: { params: Promise<{ id: string }> }) => {
   if (!event) return <div className="text-center py-16">Event not found</div>;
 
   return (
-    <div className="max-w-3xl mx-auto py-16 px-6">
+    <div className="bg-white max-w-3xl mx-auto py-16 px-6">
       <h1 className="text-4xl font-bold mb-6 text-center">{event.title}</h1>
 
       <div className="mb-10">

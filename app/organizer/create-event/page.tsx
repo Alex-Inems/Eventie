@@ -114,7 +114,7 @@ const EventCreationForm = () => {
 
   // Provide fallback for user name and photo URL
   const userName = user?.name || 'Guest';
-  const userProfilePic = user?.photoURL || '/default-avatar.png';
+  const userProfilePic = user?.photoURL || '/images/default-profile.jpeg';
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [speakers, setSpeakers] = useState<{ name: string; bio: string; photo: File | null }[]>([]);
@@ -146,11 +146,11 @@ useEffect(() => {
 }, [tickets]);
 
   return (
-    <div className="flex lg:bg-gray-900  mb-12">
-      <Sidebar userName="Organizer" userProfilePic="" logout={() => { }} />
+    <div className="flex lg:bg-gray-900 bg-white mb-12">
+      <Sidebar/>
 
       <div className="flex-1 p-6 lg:p-8 bg-white lg:mr-24 shadow-lg rounded-lg mx-auto mt-10 max-w-4xl w-full">
-        <Mobilenav router={router} logout={() => { }} />
+        <Mobilenav/>
 
         {user && (
           <div className="flex items-center mb-8">

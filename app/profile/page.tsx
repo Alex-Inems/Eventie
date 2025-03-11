@@ -10,8 +10,8 @@ import Sidebar from '@/components/Sidebar';
 import Mobilenav from '@/components/Mobilenav';
 import Image from 'next/image';
 
-const DEFAULT_PROFILE_PIC = '/default-profile.png'; // Path to default profile image
-const DEFAULT_COVER_PIC = '/default-cover.jpg'; // Path to default cover image
+const DEFAULT_PROFILE_PIC = '/images/default-profile.jpeg'; // Path to default profile image
+const DEFAULT_COVER_PIC = '/images/default-profile.jpeg'; // Path to default cover image
 
 // Define interface for UserUpdates
 interface UserUpdates {
@@ -212,10 +212,12 @@ const ProfilePage = () => {
     return twitterPattern.test(links.twitter) && linkedinPattern.test(links.linkedin);
   };
 
-  if (loading) {
+ 
+  // Centered milky spinner while loading
+  if (loading ) {
     return (
-      <div className="text-center py-20">
-        Loading...
+      <div className="flex justify-center items-center h-screen bg-white/30 backdrop-blur-md">
+        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -223,16 +225,7 @@ const ProfilePage = () => {
   return (
     <div className="flex flex-col lg:flex-row bg-gray-50">
       {/* Left Sidebar */}
-      <Sidebar
-        userName={userName}
-        userProfilePic={profilePic}
-        logout={() => {
-          const auth = getAuth();
-          auth.signOut().then(() => {
-            router.push('/auth');
-          });
-        }}
-      />
+      <Sidebar/>
       {/* Main Content */}
       <div className="flex-1 p-6 lg:ml-44 max-w-screen-lg mx-auto mb-14">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Profile</h1>
@@ -388,7 +381,7 @@ const ProfilePage = () => {
         
       </div>
        {/* Mobile Navigation */}
-       <Mobilenav router={router} logout={logout} />      
+       <Mobilenav/>      
     </div>
   );
 };

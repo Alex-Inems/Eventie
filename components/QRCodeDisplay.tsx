@@ -35,7 +35,15 @@ const QRCodeDisplay = ({ qrId }: Props) => {
     fetchQRCode();
   }, [qrId]);
 
-  if (loading) return <div>Loading QR Code...</div>;
+  
+  // Centered milky spinner while loading
+  if (loading ) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-white/30 backdrop-blur-md">
+        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
   if (error) return <div>{error}</div>;
 
   return (

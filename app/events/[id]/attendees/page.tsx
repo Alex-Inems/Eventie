@@ -74,7 +74,15 @@ const AttendeesPage = ({ params }: { params: Promise<{ id: string }> }) => {
     URL.revokeObjectURL(url);
   };
 
-  if (loading) return <div className="text-center py-16">Loading attendees...</div>;
+  
+  // Centered milky spinner while loading
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-white/30 backdrop-blur-md">
+        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
