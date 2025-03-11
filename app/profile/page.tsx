@@ -48,13 +48,7 @@ const ProfilePage = () => {
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
-  const logout = () => {
-    const auth = getAuth();
-    auth.signOut().then(() => {
-      router.push('/auth');
-    });
-  };
-
+  
   // Fetch user data and update state
   useEffect(() => {
     if (!user) {

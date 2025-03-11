@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getDatabase, ref, get } from 'firebase/database';
@@ -8,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaMapMarkerAlt, FaMicrophone, FaCalendarAlt, FaTicketAlt } from 'react-icons/fa';
 
 import Sidebar from '@/components/Sidebar';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import Mobilenav from '@/components/Mobilenav';
 
 type Event = {
@@ -24,23 +24,8 @@ type Event = {
 const EventDetailPage = () => {
   const router = useRouter();
   const params = useParams();
-  const [userName, setUserName] = useState('Guest');
-  const [profilePic, setProfilePic] = useState('/images/default-profile.jpeg');
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // Fetch authenticated user details
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      if (user) {
-        setUserName(user.displayName || 'Guest');
-        setProfilePic(user.photoURL || '/images/default-profile.jpeg');
-      }
-    });
-
-    return () => unsubscribe(); // Cleanup function to prevent memory leaks
-  }, []);
 
   // Fetch event details from Firebase
   const fetchEvent = useCallback(async () => {
@@ -68,14 +53,6 @@ const EventDetailPage = () => {
   useEffect(() => {
     fetchEvent();
   }, [fetchEvent]);
-
-  // Logout function
-  const logout = () => {
-    const auth = getAuth();
-    auth.signOut().then(() => {
-      router.push('/auth');
-    });
-  };
 
   // Centered milky spinner while loading
   if (loading) {
@@ -105,7 +82,7 @@ const EventDetailPage = () => {
 
   return (
     <div className="relative min-h-screen bg-gray-50">
-      <Sidebar/>
+      <Sidebar />
       <div className="max-w-3xl mx-auto py-16 px-6">
         <h1 className="text-4xl font-bold mb-4 text-center text-blue-700 animate-fadeIn">
           {event.title}
@@ -155,7 +132,7 @@ const EventDetailPage = () => {
         </button>
       </div>
 
-      <Mobilenav/>
+      <Mobilenav />
     </div>
   );
 };

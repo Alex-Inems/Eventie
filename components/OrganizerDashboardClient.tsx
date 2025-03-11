@@ -71,7 +71,7 @@ const OrganizerDashboardClient = () => {
             organizerId: eventData.organizerId,
             totalTicketsSold: eventData.totalTicketsSold || 0,
             date: eventData.date || "",
-            imageUrl: eventData.imageUrl || "/default-event-image.jpg",
+            imageUrl: eventData.imageUrl || "/default-event-image.jpeg",
             description: eventData.description || "No description available",
           });
         });
@@ -83,9 +83,12 @@ const OrganizerDashboardClient = () => {
     fetchEvents();
   }, [currentUser]);
 
-  // ✅ Corrected `viewAttendees` function
   const viewAttendees = (eventId: string) => {
     router.push(`/dashboard/organizer/events/${encodeURIComponent(eventId)}/attendees`);
+  };
+
+  const viewEvent = (eventId: string) => {
+    router.push(`/events/${encodeURIComponent(eventId)}`);
   };
 
   const toggleEventView = () => {
@@ -184,12 +187,22 @@ const OrganizerDashboardClient = () => {
                 className="w-16 h-16 rounded-md object-cover mr-4"
               />
               <h2 className="text-lg font-semibold">{event.title}</h2>
-              <button
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-blue-700 text-xs"
-                onClick={() => viewAttendees(event.id)}
-              >
-                View Attendees
-              </button>
+
+              {event.organizerId === currentUser?.uid ? (
+                <button
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-blue-700 text-xs"
+                  onClick={() => viewAttendees(event.id)}
+                >
+                  View Attendees
+                </button>
+              ) : (
+                <button
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-gray-700 text-xs"
+                  onClick={() => viewEvent(event.id)}
+                >
+                  View Event
+                </button>
+              )}
             </div>
           ))}
         </div>

@@ -93,7 +93,7 @@ const Sidebar = () => {
           <div className="flex items-center space-x-2 text-white text-sm">
             <Image
               className="w-8 h-8 rounded-full"
-              src={currentUser?.photoURL || "/images/default-profile.png"}
+              src={currentUser?.photoURL || "/images/default-profile.jpeg"}
               alt="Profile"
               width={32}
               height={32}

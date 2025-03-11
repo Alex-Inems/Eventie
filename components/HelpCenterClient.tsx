@@ -7,8 +7,6 @@ import { getAuth } from 'firebase/auth';
 const HelpCenterClient = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [userName, setUserName] = useState('Organizer');
-  const [profilePic, setProfilePic] = useState<string>('');
   const auth = getAuth();
   const router = useRouter();
   const user = auth.currentUser;
@@ -18,8 +16,6 @@ const HelpCenterClient = () => {
       router.push('/auth');
       return;
     }
-    setUserName(user.displayName || 'Organizer');
-    setProfilePic(user.photoURL || '/images/default-profile.jpeg');
   }, [user, router]);
 
   const faqs = [
