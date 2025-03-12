@@ -5,6 +5,8 @@ import { ref, get } from 'firebase/database';
 import { realtimeDb } from '@/firebaseConfig';
 import { toast } from 'react-toastify';
 import Papa from 'papaparse';
+import Sidebar from '@/components/Sidebar';
+import Mobilenav from '@/components/Mobilenav';
 
 type Attendee = {
   username: string;
@@ -18,12 +20,13 @@ type Attendee = {
 const AttendeesPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(false);
 
-  const { id } = use(params);
+  const { id } = use(params); // ✅ Unwrapping the Promise
 
   useEffect(() => {
     const fetchAttendees = async () => {
-      const attendeeRef = ref(realtimeDb, `attendees/${id}`);
+      const attendeeRef = ref(realtimeDb, `events/${id}/attendees`); // ✅ Corrected path
       try {
         const snapshot = await get(attendeeRef);
 
@@ -48,6 +51,17 @@ const AttendeesPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
     fetchAttendees();
   }, [id]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    handleResize(); // Run on mount
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const downloadCSV = () => {
     if (attendees.length === 0) {
@@ -74,8 +88,6 @@ const AttendeesPage = ({ params }: { params: Promise<{ id: string }> }) => {
     URL.revokeObjectURL(url);
   };
 
-  
-  // Centered milky spinner while loading
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-white/30 backdrop-blur-md">
@@ -85,7 +97,8 @@ const AttendeesPage = ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4">
+    <div className="bg-white min-h-screen">
+      {isDesktop && <Sidebar />} {/* ✅ Only render Sidebar on desktop */}
       <h1 className="text-3xl font-bold mb-6 text-center">Event Attendees</h1>
 
       {attendees.length > 0 ? (
@@ -99,34 +112,41 @@ const AttendeesPage = ({ params }: { params: Promise<{ id: string }> }) => {
             </button>
           </div>
 
-          <div className="overflow-x-auto rounded-lg shadow-lg">
-            <table className="w-full min-w-[700px] border-collapse">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="border p-3 text-left text-sm">Username</th>
-                  <th className="border p-3 text-left text-sm">Email</th>
-                  <th className="border p-3 text-left text-sm">Ticket Type</th>
-                  <th className="border p-3 text-left text-sm">Reference</th>
-                  <th className="border p-3 text-left text-sm">Date-Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {attendees.map((attendee) => (
-                  <tr key={attendee.id} className="hover:bg-gray-50 transition">
-                    <td className="border p-3">{attendee.username}</td>
-                    <td className="border p-3">{attendee.email}</td>
-                    <td className="border p-3">{attendee.ticketType}</td>
-                    <td className="border p-3">{attendee.reference}</td>
-                    <td className="border p-3">{new Date(attendee.dateTime).toLocaleString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="w-full flex justify-center px-4">
+            <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <div className="max-h-[70vh] overflow-y-auto">
+                  <table className="w-full border-collapse">
+                    <thead className="bg-gray-100 sticky top-0">
+                      <tr>
+                        <th className="border p-3 text-left text-sm">Username</th>
+                        <th className="border p-3 text-left text-sm">Email</th>
+                        <th className="border p-3 text-left text-sm">Ticket Type</th>
+                        <th className="border p-3 text-left text-sm">Reference</th>
+                        <th className="border p-3 text-left text-sm">Date-Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {attendees.map((attendee) => (
+                        <tr key={attendee.id} className="hover:bg-gray-50 transition">
+                          <td className="border p-3">{attendee.username}</td>
+                          <td className="border p-3">{attendee.email}</td>
+                          <td className="border p-3">{attendee.ticketType}</td>
+                          <td className="border p-3">{attendee.reference}</td>
+                          <td className="border p-3">{new Date(attendee.dateTime).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </>
       ) : (
         <div className="text-center py-10">No attendees registered yet</div>
       )}
+      <Mobilenav />
     </div>
   );
 };

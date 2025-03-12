@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import AuthContext from "@/context/AuthContext"; // Adjust path if needed
 
+
+
 const ClientSideFeatures = () => {
   const authContext = useContext(AuthContext);
   if (!authContext) {
@@ -77,6 +79,7 @@ const ClientSideFeatures = () => {
           Start Organizing
         </button>
       </div>
+
     </div>
   );
 };

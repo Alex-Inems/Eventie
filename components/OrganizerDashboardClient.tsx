@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AuthContext from "@/context/AuthContext";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, get } from "firebase/database";
 import { MdCheckCircle, MdCreate, MdFolderOpen, MdSearch } from "react-icons/md";
 import Image from "next/image";
 
@@ -32,59 +32,76 @@ const OrganizerDashboardClient = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [userBio, setUserBio] = useState("");
 
-  // Redirect to auth page if not logged in
+  // Redirect if user is not logged in
   useEffect(() => {
     if (!currentUser) {
-      router.replace("/auth");
+      router.push("/auth");
     }
   }, [currentUser, router]);
 
+  // Fetch user profile data
   useEffect(() => {
     if (!currentUser) return;
 
-    const db = getDatabase();
-    const userRef = ref(db, `users/${currentUser.uid}`);
+    const fetchUserData = async () => {
+      const db = getDatabase();
+      const userRef = ref(db, `users/${currentUser.uid}`);
 
-    onValue(userRef, (snapshot) => {
-      const userData = snapshot.val();
-      if (userData) {
-        setIsVerified(userData.isVerified || false);
-        setUserBio(userData.bio || "No bio available");
+      try {
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setIsVerified(userData.isVerified || false);
+          setUserBio(userData.bio || "No bio available");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-    });
+    };
+
+    fetchUserData();
   }, [currentUser]);
 
+  // Fetch events
   useEffect(() => {
     if (!currentUser) return;
 
-    const fetchEvents = () => {
+    const fetchEvents = async () => {
+      setLoading(true);
       const db = getDatabase();
       const eventsRef = ref(db, "events");
 
-      onValue(eventsRef, (snapshot) => {
-        const allEvents: Event[] = [];
-        snapshot.forEach((childSnapshot) => {
-          const eventData = childSnapshot.val();
-          allEvents.push({
-            id: childSnapshot.key ?? "",
-            title: eventData.title,
-            organizerId: eventData.organizerId,
-            totalTicketsSold: eventData.totalTicketsSold || 0,
-            date: eventData.date || "",
-            imageUrl: eventData.imageUrl || "/default-event-image.jpeg",
-            description: eventData.description || "No description available",
+      try {
+        const snapshot = await get(eventsRef);
+        if (snapshot.exists()) {
+          const allEvents: Event[] = [];
+          snapshot.forEach((childSnapshot) => {
+            const eventData = childSnapshot.val();
+            allEvents.push({
+              id: childSnapshot.key ?? "",
+              title: eventData.title,
+              organizerId: eventData.organizerId,
+              totalTicketsSold: eventData.totalTicketsSold || 0,
+              date: eventData.date || "",
+              imageUrl: eventData.imageUrl || "/default-event-image.jpg",
+              description: eventData.description || "No description available",
+            });
           });
-        });
-        setEvents(allEvents);
+          setEvents(allEvents);
+        }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
         setLoading(false);
-      });
+      }
     };
 
     fetchEvents();
   }, [currentUser]);
 
+  // Navigation functions
   const viewAttendees = (eventId: string) => {
-    router.push(`/dashboard/organizer/events/${encodeURIComponent(eventId)}/attendees`);
+    router.push(`/events/${encodeURIComponent(eventId)}/attendees`);
   };
 
   const viewEvent = (eventId: string) => {
@@ -99,6 +116,7 @@ const OrganizerDashboardClient = () => {
     router.push("/organizer/create-event");
   };
 
+  // Filter events based on search and organizerId
   const filteredEvents = events.filter((event) => {
     const isMatchingSearchQuery =
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -119,30 +137,35 @@ const OrganizerDashboardClient = () => {
     <div className="flex-1 p-6 lg:ml-44 mb-14">
       <h1 className="text-xl font-bold mb-4">My Events</h1>
 
+      {/* Profile Info */}
+      <div className="flex items-center space-x-3 mb-6">
+        {isVerified && <MdCheckCircle className="text-green-500 text-2xl" />}
+        <p className="text-sm text-gray-700">Bio: {userBio}</p>
+      </div>
+
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
         <button
           className="shadow-lg flex items-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md transition text-sm"
           onClick={createEvent}
         >
-          <MdCreate />
+          <MdCreate className="mr-2" />
           Create New Event
         </button>
         <button
           className="shadow-lg flex items-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition text-sm"
           onClick={toggleEventView}
         >
-          <MdFolderOpen />
+          <MdFolderOpen className="mr-2" />
           {showCreatedEvents ? "Show Upcoming Events" : "Show Created Events"}
         </button>
       </div>
 
       <h2 className="text-lg font-bold mb-4">All Events</h2>
 
+      {/* Search Bar */}
       <div className="mb-6 w-full max-w-md mx-auto">
         <div className="relative">
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-            <MdSearch />
-          </div>
+          <MdSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600" />
           <input
             type="text"
             className="w-full py-2 pl-10 pr-4 bg-gray-100 text-gray-700 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -153,51 +176,22 @@ const OrganizerDashboardClient = () => {
         </div>
       </div>
 
-      {currentUser && (
-        <div className="flex items-center space-x-2 mb-6">
-          <Image
-            src={currentUser.photoURL || "/images/default-profile.jpeg"}
-            alt="Profile"
-            width={64}
-            height={64}
-            className="w-16 h-16 rounded-full object-cover shadow-md"
-          />
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-xl font-semibold">{currentUser.displayName || "Organizer"}</span>
-              {isVerified && <MdCheckCircle className="text-blue-700" />}
-            </div>
-            <p className="text-sm text-gray-600 mt-2">{userBio}</p>
-          </div>
-        </div>
-      )}
-
       {filteredEvents.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredEvents.map((event) => (
-            <div
-              key={event.id}
-              className="p-4 bg-white border rounded-lg shadow-lg transition-all hover:scale-105 hover:shadow-xl hover:cursor-pointer"
-            >
-              <Image
-                src={event.imageUrl}
-                alt={event.title}
-                width={64}
-                height={64}
-                className="w-16 h-16 rounded-md object-cover mr-4"
-              />
+            <div key={event.id} className="p-4 bg-white border rounded-lg shadow-lg hover:scale-105 transition">
+              <Image src={event.imageUrl} alt={event.title} width={300} height={200} className="rounded-md mb-2" />
               <h2 className="text-lg font-semibold">{event.title}</h2>
-
               {event.organizerId === currentUser?.uid ? (
                 <button
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-blue-700 text-xs"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-blue-700 text-xs mt-2"
                   onClick={() => viewAttendees(event.id)}
                 >
                   View Attendees
                 </button>
               ) : (
                 <button
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-gray-700 text-xs"
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-gray-700 text-xs mt-2"
                   onClick={() => viewEvent(event.id)}
                 >
                   View Event
