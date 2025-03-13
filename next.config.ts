@@ -6,6 +6,7 @@ const securityHeaders = [
     value: `
       default-src * 'unsafe-inline' 'unsafe-eval' blob: data:; 
       script-src * 'unsafe-inline' 'unsafe-eval' blob: data:;
+      script-src-elem * 'unsafe-inline' 'unsafe-eval' blob: data:;
       style-src * 'unsafe-inline' 'unsafe-eval' blob: data:;
       img-src * data: blob:;
       font-src * data:;
