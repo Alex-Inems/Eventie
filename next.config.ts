@@ -4,14 +4,14 @@ const securityHeaders = [
   {
     key: 'Content-Security-Policy',
     value: `
-      default-src 'self';
+      default-src *; 
       script-src-elem 'self' 'unsafe-inline' https://checkout.paystack.com https://www.googletagmanager.com https://www.gstatic.com https://www.googleapis.com;
-      frame-src 'self' https://checkout.paystack.com https://firebasestorage.googleapis.com;
-      connect-src 'self' https://api.paystack.co https://firestore.googleapis.com https://www.googleapis.com;
-      img-src 'self' https://firebasestorage.googleapis.com https://lh3.googleusercontent.com https://images.unsplash.com data:;
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; https://securetoken.googleapis.com/v1/token?key=AIzaSyAyP_AqSFgVK0-mLZOu9uNFUoXtFViSB
-      font-src 'self' https://fonts.gstatic.com;
-    `.replace(/\n/g, '') // Remove all line breaks
+      frame-src *;
+      connect-src *;
+      img-src * data:;
+      style-src * 'unsafe-inline' https://fonts.googleapis.com;
+      font-src *;
+    `.replace(/\n/g, '') // Remove line breaks
   }
 ];
 
@@ -20,15 +20,15 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'lh3.googleusercontent.com', // Google-hosted images
+        hostname: 'lh3.googleusercontent.com',
       },
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com', // Unsplash-hosted images
+        hostname: 'images.unsplash.com',
       },
       {
         protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com', // Firebase Storage hostname
+        hostname: 'firebasestorage.googleapis.com',
       },
     ],
   },
