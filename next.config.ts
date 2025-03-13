@@ -9,7 +9,7 @@ const securityHeaders = [
       frame-src 'self' https://checkout.paystack.com https://firebasestorage.googleapis.com;
       connect-src 'self' https://api.paystack.co https://firestore.googleapis.com https://www.googleapis.com;
       img-src 'self' https://firebasestorage.googleapis.com https://lh3.googleusercontent.com https://images.unsplash.com data:;
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; https://securetoken.googleapis.com/v1/token?key=AIzaSyAyP_AqSFgVK0-mLZOu9uNFUoXtFViSB
       font-src 'self' https://fonts.gstatic.com;
     `.replace(/\n/g, '') // Remove all line breaks
   }
