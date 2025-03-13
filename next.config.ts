@@ -5,31 +5,31 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.paystack.com https://www.googletagmanager.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.paystack.com https://www.googletagmanager.com https://www.gstatic.com https://www.googleapis.com;
+      connect-src 'self' https://api.paystack.co https://firestore.googleapis.com wss://*.firebaseio.com https://*.googleapis.com;
+      img-src 'self' data: https://firebasestorage.googleapis.com https://images.unsplash.com https://lh3.googleusercontent.com;
       frame-src https://checkout.paystack.com;
-      connect-src 'self' https://api.paystack.co wss://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com;
-      font-src 'self' data: https:;
-      img-src 'self' data: https:;
-      style-src 'self' 'unsafe-inline' https:;
-    `,
+      font-src 'self' https://fonts.gstatic.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    `
   },
   {
     key: 'Referrer-Policy',
-    value: 'strict-origin-when-cross-origin',
-  },
-  {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
+    value: 'strict-origin-when-cross-origin'
   },
   {
     key: 'X-Frame-Options',
-    value: 'DENY',
+    value: 'DENY'
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff'
   },
   {
     key: 'X-XSS-Protection',
-    value: '1; mode=block',
-  },
-];
+    value: '1; mode=block'
+  }
+]
 
 const nextConfig: NextConfig = {
   images: {
@@ -44,7 +44,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com', // Firebase Storage hostname
+        hostname: 'firebasestorage.googleapis.com', // Firebase Storage
       },
     ],
   },
@@ -52,7 +52,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/(.*)',
-        headers: securityHeaders,
+        headers: securityHeaders
       },
     ];
   },
