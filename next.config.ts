@@ -4,13 +4,15 @@ const securityHeaders = [
   {
     key: 'Content-Security-Policy',
     value: `
-      default-src *; 
-      script-src-elem 'self' 'unsafe-inline' https://checkout.paystack.com https://www.googletagmanager.com https://www.gstatic.com https://www.googleapis.com;
+      default-src * 'unsafe-inline' 'unsafe-eval' blob: data:; 
+      script-src * 'unsafe-inline' 'unsafe-eval' blob: data:;
+      style-src * 'unsafe-inline' 'unsafe-eval' blob: data:;
+      img-src * data: blob:;
+      font-src * data:;
       frame-src *;
       connect-src *;
-      img-src * data:;
-      style-src * 'unsafe-inline' https://fonts.googleapis.com;
-      font-src *;
+      media-src *;
+      object-src *;
     `.replace(/\n/g, '') // Remove line breaks
   }
 ];
