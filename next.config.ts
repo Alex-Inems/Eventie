@@ -3,12 +3,7 @@ import type { NextConfig } from 'next';
 const securityHeaders = [
   {
     key: 'Content-Security-Policy',
-    value: `
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' https://checkout.paystack.com https://www.googletagmanager.com;
-      frame-src https://checkout.paystack.com;
-      connect-src 'self' https://api.paystack.co;
-    `
+    value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.paystack.com https://www.googletagmanager.com; frame-src https://checkout.paystack.com; connect-src 'self' https://api.paystack.co;"
   }
 ]
 
