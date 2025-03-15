@@ -92,7 +92,7 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
   if (!event) return <div className="text-center py-16">Event not found</div>;
 
   return (
-    <div className="bg-white max-w-3xl mx-auto py-16 px-6 flex-grow">
+    <div className="bg-white  lg:ml-44 mx-auto py-16 px-6 flex-grow">
       <h1 className="text-4xl font-bold mb-6 text-center">{event.title}</h1>
 
       <div className="mb-10">
