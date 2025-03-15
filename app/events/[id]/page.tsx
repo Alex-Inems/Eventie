@@ -103,7 +103,7 @@ const EventDetailPage = () => {
         <p className="text-xl text-gray-800 mb-6 leading-relaxed animate-slideIn">{event.description}</p>
 
         <div className="mb-6">
-          <h3 className="text-2xl font-semibold mb-2 text-blue-700">
+          <h3 className="text-2xl font-semibold mb-2 text-red-950">
             <FaMicrophone className="inline mr-2" /> Speakers
           </h3>
           <ul>
@@ -125,7 +125,7 @@ const EventDetailPage = () => {
         </div>
 
         <button
-          className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition shadow-lg hover:shadow-xl mt-8 w-full animate-bounce"
+          className="bg-green-900 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow-lg hover:shadow-xl mt-8 w-full animate-bounce"
           onClick={() => router.push(`/events/${event.id}/tickets`)}
         >
           <FaTicketAlt className="inline mr-2" /> Purchase Tickets

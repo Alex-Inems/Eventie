@@ -1,7 +1,8 @@
 "use client";
+
 import { useState, useEffect, useContext } from "react";
-import  AuthContext  from "@/context/AuthContext";
-import { db } from "@/firebaseConfig"; // Correct Firebase import
+import AuthContext from "@/context/AuthContext";
+import { db } from "@/firebaseConfig"; // Firebase import
 import { ref, get } from "firebase/database"; // Realtime Database functions
 
 export default function PaystackButton() {
@@ -15,10 +16,9 @@ export default function PaystackButton() {
     useEffect(() => {
         const fetchUserTicket = async () => {
             if (!user?.uid) return;
-            try {
-                const userTicketRef = ref(db, `users/${user.uid}/selectedTicket`);
-                const snapshot = await get(userTicketRef);
 
+            try {
+                const snapshot = await get(ref(db, `users/${user.uid}/selectedTicket`));
                 if (snapshot.exists()) {
                     setTicketId(snapshot.val());
                 } else {
@@ -36,12 +36,12 @@ export default function PaystackButton() {
     useEffect(() => {
         const fetchTicketPrice = async () => {
             if (!ticketId) return;
-            try {
-                const ticketRef = ref(db, `tickets/${ticketId}`);
-                const snapshot = await get(ticketRef);
 
+            try {
+                const snapshot = await get(ref(db, `tickets/${ticketId}`));
                 if (snapshot.exists()) {
-                    setAmount(snapshot.val().price);
+                    const ticketData = snapshot.val();
+                    setAmount(ticketData?.price);
                 } else {
                     console.error("Ticket not found.");
                 }
@@ -54,57 +54,50 @@ export default function PaystackButton() {
     }, [ticketId]);
 
     const handlePayment = async () => {
-      console.log("handlePayment started"); // Log before anything runs
-  
-      if (!email) {
-          console.log("No email found");
-          alert("User email is required for payment.");
-          return;
-      }
-  
-      if (!amount) {
-          console.log("Invalid ticket amount");
-          alert("Invalid ticket amount.");
-          return;
-      }
-  
-      setLoading(true);
-      
-      try {
-          console.log("Sending API request...");
-  
-          const response = await fetch("/api/paystack/initiate", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, amount })
-          });
-  
-          console.log("API response received");
-  
-          const data = await response.json();
-  
-          console.log("Response Data:", data);
-  
-          if (data.success) {
-              console.log("Redirecting to:", data.data.authorization_url);
-              window.location.href = data.data.authorization_url;
-          } else {
-              console.error("Payment initiation failed:", data.message);
-              alert("Payment initiation failed!");
-          }
-      } catch (error) {
-          console.error("Error processing payment:", error);
-          alert("Error processing payment.");
-      } finally {
-          setLoading(false);
-          console.log("handlePayment completed");
-      }
-  };
-    return (
-      <button onClick={handlePayment} className="bg-blue-600 text-white px-4 py-2 rounded" disabled={loading || !amount}>
-      {loading ? "Processing..." : "Pay Now"}
-  </button>
-  
+        if (!email) {
+            alert("User email is required for payment.");
+            return;
+        }
 
+        if (!amount) {
+            alert("Invalid ticket amount.");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const res = await fetch("/api/paystack/initiate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    amount: parseInt(amount) // Convert to integer (in Kobo)
+                })
+            });
+
+            const data = await res.json();
+
+            if (data?.success) {
+                // Redirect to Paystack payment page
+                window.location.href = data.data.authorization_url;
+            } else {
+                console.error("Payment error:", data?.message || "Something went wrong.");
+            }
+        } catch (error) {
+            console.error("Error processing payment:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <button 
+            onClick={handlePayment} 
+            className={`bg-green-600 text-white px-4 py-2 rounded ${loading && "opacity-50"}`}
+            disabled={loading || !amount}
+        >
+            {loading ? "Processing..." : `Pay ₦${amount || 0}`}
+        </button>
     );
 }

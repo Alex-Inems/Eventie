@@ -5,8 +5,13 @@ import { AuthProvider } from "@/context/AuthProvider"; // Ensure correct path
 
 
 export const metadata: Metadata = {
-  title: "Uplift",
-  description: "UpLifting your business",
+  title: "Eventie",
+  description: "Your all-in-one platform for effortless event management and discovery",
+
+};
+
+export const viewport = {
+  themeColor: "#00FF00", // Green color
 };
 
 export default function RootLayout({
