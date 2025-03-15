@@ -140,7 +140,7 @@ const OrganizerDashboardClient = () => {
       {/* Profile Info */}
       <div className="flex items-center space-x-3 mb-6">
         {isVerified && <MdCheckCircle className="text-green-500 text-2xl" />}
-      
+        <p className="text-sm text-gray-700">{userBio}</p>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
@@ -191,7 +191,7 @@ const OrganizerDashboardClient = () => {
                 </button>
               ) : (
                 <button
-                  className="bg-red-900 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-red-500 text-xs mt-2"
+                  className="bg-red-900 text-white px-4 py-2 rounded-lg shadow-md transition hover:bg-red-700 text-xs mt-2"
                   onClick={() => viewEvent(event.id)}
                 >
                   View Event
