@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getDatabase, ref, get } from 'firebase/database';
 import Image from 'next/image';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FaMapMarkerAlt, FaMicrophone, FaCalendarAlt, FaTicketAlt } from 'react-icons/fa';
 
 import Sidebar from '@/components/Sidebar';
@@ -27,38 +25,34 @@ const EventDetailPage = () => {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch event details from Firebase
-  const fetchEvent = useCallback(async () => {
-    try {
+  useEffect(() => {
+    const fetchEvent = async () => {
       if (!params?.id) return;
-      const db = getDatabase();
-      const eventRef = ref(db, `events/${params.id}`);
-      const snapshot = await get(eventRef);
+      setLoading(true);
+      try {
+        const db = getDatabase();
+        const eventRef = ref(db, `events/${params.id}`);
+        const snapshot = await get(eventRef);
 
-      if (snapshot.exists()) {
-        setEvent({ ...snapshot.val(), id: snapshot.key! });
-      } else {
-        setEvent(null);
-        toast.error('Event not found');
+        if (snapshot.exists()) {
+          setEvent({ ...snapshot.val(), id: snapshot.key! });
+        } else {
+          setEvent(null);
+        }
+      } catch (error) {
+        console.error('Error fetching event details:', error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching event details:', error);
-      toast.error('Failed to fetch event details');
-      setEvent(null);
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    fetchEvent();
   }, [params?.id]);
 
-  useEffect(() => {
-    fetchEvent();
-  }, [fetchEvent]);
-
-  // Centered milky spinner while loading
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-white/30 backdrop-blur-md">
-        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-12 h-12 border-4 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -84,48 +78,47 @@ const EventDetailPage = () => {
     <div className="relative min-h-screen bg-gray-50">
       <Sidebar />
       <div className="max-w-3xl mx-auto py-16 px-6">
-        <h1 className="text-4xl font-bold mb-4 text-center text-blue-700 animate-fadeIn">
-          {event.title}
-        </h1>
+        <h1 className="text-4xl font-bold mb-4 text-center text-blue-700">{event.title}</h1>
         <p className="text-lg text-gray-600 text-center mb-4">
           <FaCalendarAlt className="inline mr-2 text-blue-700" />
           {new Date(event.date).toLocaleString()}
         </p>
         <div className="relative w-full h-64 mb-8 rounded-lg overflow-hidden shadow-lg">
           <Image
-            src={event.imageUrl || '/images/default-event.jpg'}
-            alt={event.title || 'Event Image'}
+            src={event.imageUrl}
+            alt={event.title}
             layout="fill"
             objectFit="cover"
             className="rounded-lg hover:scale-105 transition-transform duration-300"
+            priority
           />
         </div>
-        <p className="text-xl text-gray-800 mb-6 leading-relaxed animate-slideIn">{event.description}</p>
+        <p className="text-xl text-gray-800 mb-6 leading-relaxed">{event.description}</p>
 
         <div className="mb-6">
           <h3 className="text-2xl font-semibold mb-2 text-red-950">
             <FaMicrophone className="inline mr-2" /> Speakers
           </h3>
-          <ul>
-            {event.speakers && event.speakers.length > 0 ? (
-              event.speakers.map((speaker, idx) => (
-                <li key={idx} className="text-lg text-gray-700 py-1 animate-slideInDelay">{speaker}</li>
-              ))
-            ) : (
-              <span className="inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">No speakers available</span>
-            )}
-          </ul>
+          {event.speakers?.length ? (
+            <ul>
+              {event.speakers.map((speaker, idx) => (
+                <li key={idx} className="text-lg text-gray-700 py-1">{speaker}</li>
+              ))}
+            </ul>
+          ) : (
+            <span className="inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">No speakers available</span>
+          )}
         </div>
 
         <div className="mb-6">
           <h3 className="text-2xl font-semibold mb-2 text-blue-700">
             <FaMapMarkerAlt className="inline mr-2" /> Location
           </h3>
-          <p className="text-lg text-gray-700 animate-slideIn">{event.location}</p>
+          <p className="text-lg text-gray-700">{event.location}</p>
         </div>
 
         <button
-          className="bg-green-900 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow-lg hover:shadow-xl mt-8 w-full animate-bounce"
+          className="bg-green-900 text-white px-6 py-3 rounded-lg hover:bg-green-700 mb-14 transition shadow-lg hover:shadow-xl mt-8 w-full"
           onClick={() => router.push(`/events/${event.id}/tickets`)}
         >
           <FaTicketAlt className="inline mr-2" /> Purchase Tickets

@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const securityHeaders = [
   {
@@ -15,39 +16,24 @@ const securityHeaders = [
       object-src * data;
       worker-src * data: blob: 'unsafe-inline' 'unsafe-eval';
       manifest-src *;
-    `.replace(/\n/g, '')
-  }
+    `.replace(/\n/g, ''),
+  },
 ];
 
-const nextConfig: NextConfig = {
+const nextConfig: NextConfig = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})({
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com', // ✅ Google Auth Images
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com', // ✅ Unsplash Images
-      },
-      {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com', // ✅ Firebase Storage
-      },
-      {
-        protocol: 'https',
-        hostname: 'checkout.paystack.com', // ✅ Paystack Script
-      },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' }, // ✅ Google Auth Images
+      { protocol: 'https', hostname: 'images.unsplash.com' }, // ✅ Unsplash Images
+      { protocol: 'https', hostname: 'firebasestorage.googleapis.com' }, // ✅ Firebase Storage
+      { protocol: 'https', hostname: 'checkout.paystack.com' }, // ✅ Paystack Script
     ],
   },
   async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: securityHeaders
-      },
-    ];
+    return [{ source: '/(.*)', headers: securityHeaders }];
   },
-};
+});
 
 export default nextConfig;

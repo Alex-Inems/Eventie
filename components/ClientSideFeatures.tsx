@@ -1,10 +1,18 @@
 "use client";
 
 import { useContext, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation"; // Use Next.js router
 import AuthContext from "@/context/AuthContext"; // Adjust path if needed
 
-
+const images = [
+  "/images/slide.jpg",
+  "/images/slide(2).jpg",
+  "/images/slide(3).jpg",
+  "/images/slide4.jpg",
+];
 
 const ClientSideFeatures = () => {
   const authContext = useContext(AuthContext);
@@ -13,22 +21,39 @@ const ClientSideFeatures = () => {
   }
   const { currentUser } = authContext;
   const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter();
-  const pathname = usePathname(); // Get current route
-
-  // Navigation handler - forces instant navigation
-  const handleNavigation = (target: string, needsAuth: boolean = false) => {
-    if (pathname !== target) {
-      if (needsAuth && !currentUser) {
-        router.push("/auth"); // Redirect to auth page if not logged in
-      } else {
-        router.push(target);
-      }
-    }
-  };
+  const router = useRouter(); // Initialize Next.js router
 
   return (
-    <div className="relative z-10 flex flex-col justify-center items-center text-center h-full">
+    <div className="relative z-10 flex flex-col justify-center items-center text-center h-screen w-screen overflow-hidden">
+      {/* Image Slideshow */}
+      <div className="absolute inset-0 -z-10">
+        {images.map((src, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 2, // Smooth fade-in/out
+              ease: "easeInOut",
+              repeat: Infinity,
+              repeatType: "loop",
+              repeatDelay: 12, // Shorter delay for smoother looping
+              delay: index * 3, // Staggered delay per image
+            }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <Image
+              src={src}
+              alt={`Slide ${index}`}
+              fill
+              className="object-cover w-full h-full"
+              priority
+            />
+          </motion.div>
+        ))}
+      </div>
+
       <h1 className="text-4xl md:text-6xl font-bold mb-4">
         Discover. Organize. Experience.
       </h1>
@@ -64,22 +89,20 @@ const ClientSideFeatures = () => {
 
       {/* Action Buttons */}
       <div className="flex justify-center gap-4">
-        <button
-          onClick={() => handleNavigation("/events")}
-          className="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
-          aria-label="Discover Events"
-        >
+        <Link href="/events" prefetch={false} className="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
           Discover Events
-        </button>
-        <button
-          onClick={() => handleNavigation("/dashboard/organizer", true)}
-          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
-          aria-label="Start Organizing"
-        >
-          Start Organizing
-        </button>
-      </div>
+        </Link>
 
+        {currentUser ? (
+          <Link href="/dashboard/organizer" prefetch={false} className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+            Start Organizing
+          </Link>
+        ) : (
+          <Link href="/auth" prefetch={false} className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+            Login to Organize
+          </Link>
+        )}
+      </div>
     </div>
   );
 };
