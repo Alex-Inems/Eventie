@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -14,6 +14,9 @@ const images = [
   "/images/slide4.jpg",
 ];
 
+const DISPLAY_TIME = 5000; // 5 seconds per image
+const FADE_DURATION = 2000; // 2 seconds fade effect
+
 const ClientSideFeatures = () => {
   const authContext = useContext(AuthContext);
   if (!authContext) {
@@ -22,6 +25,15 @@ const ClientSideFeatures = () => {
   const { currentUser } = authContext;
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter(); // Initialize Next.js router
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Image slideshow logic
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, DISPLAY_TIME);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="relative z-10 flex flex-col justify-center items-center text-center h-screen w-screen overflow-hidden">
@@ -30,25 +42,17 @@ const ClientSideFeatures = () => {
         {images.map((src, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 2, // Smooth fade-in/out
-              ease: "easeInOut",
-              repeat: Infinity,
-              repeatType: "loop",
-              repeatDelay: 12, // Shorter delay for smoother looping
-              delay: index * 3, // Staggered delay per image
-            }}
             className="absolute inset-0 w-full h-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: index === currentIndex ? 1 : 0 }}
+            transition={{ duration: FADE_DURATION / 1000, ease: "easeInOut" }}
           >
             <Image
               src={src}
               alt={`Slide ${index}`}
               fill
               className="object-cover w-full h-full"
-              priority
+              priority={index === 0} // Load first image eagerly
             />
           </motion.div>
         ))}
@@ -89,16 +93,28 @@ const ClientSideFeatures = () => {
 
       {/* Action Buttons */}
       <div className="flex justify-center gap-4">
-        <Link href="/events" prefetch={false} className="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+        <Link
+          href="/events"
+          prefetch={false}
+          className="bg-white ml-3 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
+        >
           Discover Events
         </Link>
 
         {currentUser ? (
-          <Link href="/dashboard/organizer" prefetch={false} className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+          <Link
+            href="/dashboard/organizer"
+            prefetch={false}
+            className="bg-white  text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
+          >
             Start Organizing
           </Link>
         ) : (
-          <Link href="/auth" prefetch={false} className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+          <Link
+            href="/auth"
+            prefetch={false}
+            className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 mr-3"
+          >
             Login to Organize
           </Link>
         )}
