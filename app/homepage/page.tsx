@@ -12,7 +12,7 @@ export const metadata = {
 
 const HomePage = () => {
   return (
-    <div className="relative h-screen overflow-hidden text-white flex flex-col justify-center items-center text-center">
+    <div className="bg-black relative h-screen overflow-hidden text-white flex flex-col justify-center items-center text-center">
       {/* Background animation remains untouched */}
       <div className="absolute inset-0 bg-cover bg-center animate-sliding-bg"></div>
 

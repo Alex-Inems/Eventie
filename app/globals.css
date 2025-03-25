@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: black;
+  
 }
 @keyframes sliding-bg {
   0% { background-image: url('/images/slide.jpg'); }
