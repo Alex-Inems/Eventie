@@ -30,7 +30,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-full lg:w-44 bg-gray-800 text-white hidden lg:flex flex-col h-screen p-4 fixed top-0 left-0">
+    <div className="w-full lg:w-44 bg-red-950 text-white hidden lg:flex flex-col h-screen p-4 fixed top-0 left-0">
       <h1 className="text-xl font-semibold mb-4">
         Welcome, {currentUser?.displayName || "Organizer"}
       </h1>
