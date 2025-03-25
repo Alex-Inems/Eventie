@@ -113,7 +113,7 @@ const EventCreationForm = () => {
   };
 
   // Provide fallback for user name and photo URL
-  const userName = user?.name || 'Guest';
+  const userName = user?.name || 'Organizer';
   const userProfilePic = user?.photoURL || '/images/default-profile.jpeg';
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
