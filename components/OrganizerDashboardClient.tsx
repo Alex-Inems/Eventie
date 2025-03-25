@@ -89,7 +89,7 @@ const OrganizerDashboardClient = () => {
       {/* Buttons */}
       <div className="flex flex-row justify-between gap-2 sm:gap-3 mb-4">
         <button
-          className="flex items-center text-white bg-green-600 hover:bg-green-700 px-3 py-2 rounded-md text-sm shadow"
+          className="flex items-center text-white bg-red-900 hover:bg-red-900 px-3 py-2 rounded-md text-sm shadow"
           onClick={() => navigateTo("/organizer/create-event")}
         >
           <MdCreate className="mr-2" />
