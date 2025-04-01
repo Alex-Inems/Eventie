@@ -239,7 +239,7 @@ const ProfilePage = () => {
             src={coverPic}
             alt="Cover"
             className="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-cover rounded-lg shadow-lg mb-4"
-            width={1600} // specify width
+            width={1200} // specify width
             height={500} // specify height
           />
 

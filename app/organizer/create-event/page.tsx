@@ -146,7 +146,7 @@ useEffect(() => {
 }, [tickets]);
 
   return (
-    <div className="flex lg:bg-gray-900 bg-white mb-12">
+    <div className="flex  bg-white mb-12">
       <Sidebar/>
 
       <div className="flex-1 p-6 lg:p-8 bg-white lg:mr-24 shadow-lg rounded-lg mx-auto mt-10 max-w-4xl w-full">

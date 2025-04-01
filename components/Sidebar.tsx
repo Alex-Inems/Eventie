@@ -30,7 +30,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-full lg:w-44 bg-red-950 text-white hidden lg:flex flex-col h-screen p-4 fixed top-0 left-0">
+    <div className="w-full lg:w-44  transition   border-2 hidden lg:flex flex-col h-screen p-4 fixed top-0 left-0">
       <h1 className="text-xl font-semibold mb-4">
         Welcome, {currentUser?.displayName || "Organizer"}
       </h1>
@@ -38,28 +38,28 @@ const Sidebar = () => {
       {/* Navigation Links */}
       <div className="space-y-3 flex-1">
         <button
-          className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
+          className="flex items-center space-x-2 text-gray-700 hover:text-orange-200 transition py-2 px-3 rounded-md w-full text-sm"
           onClick={() => router.push("/dashboard/organizer")}
         >
           <MdDashboard />
           <span>My Dashboard</span>
         </button>
         <button
-          className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
+          className="flex items-center space-x-2  py-2 px-3 rounded-md w-full text-sm text-gray-700 hover:text-orange-200"
           onClick={() => router.push("/organizer/create-event")}
         >
           <MdCreate />
           <span>Create Event</span>
         </button>
         <button
-          className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
+          className="flex items-center space-x-2  py-2 px-3 rounded-md w-full text-sm text-gray-700 hover:text-orange-200"
           onClick={() => router.push("/profile")}
         >
           <MdSupervisorAccount />
           <span>Edit Profile</span>
         </button>
         <button
-          className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
+          className="flex items-center space-x-2  py-2 px-3 rounded-md w-full text-sm text-gray-700 hover:text-orange-200"
           onClick={handleLogout}
         >
           <MdLogout />
@@ -70,19 +70,19 @@ const Sidebar = () => {
       {/* Bottom Section (Help, Notifications, Profile) */}
       <div className="space-y-4 mt-auto">
         <button
-          className="flex items-center space-x-2 text-white hover:bg-gray-700 py-2 px-3 rounded-md w-full text-sm"
+          className="flex items-center space-x-2  py-2 px-3 rounded-md w-full text-sm text-gray-700 hover:text-orange-200"
           onClick={() => router.push("/help")}
         >
           <MdHelpCenter />
           <span>Help Center</span>
         </button>
 
-        <div className="flex items-center space-x-2 text-white cursor-pointer text-sm">
+        <div className="flex items-center space-x-2  cursor-pointer text-sm text-gray-700 hover:text-orange-200">
           <MdNotifications />
           <span>Notifications</span>
         </div>
 
-        <div className="flex items-center space-x-2 text-white text-sm">
+        <div className="flex items-center space-x-2  text-sm">
           <Image
             priority={true}
             className="w-8 h-8 rounded-full"

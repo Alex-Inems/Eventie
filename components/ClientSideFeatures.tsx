@@ -1,21 +1,11 @@
 "use client";
 
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation"; // Use Next.js router
 import AuthContext from "@/context/AuthContext"; // Adjust path if needed
+import AnimatedGrid from "./AnimatedGridBackground";
 
-const images = [
-  "/images/slide.jpg",
-  "/images/slide(2).jpg",
-  "/images/slide(3).jpg",
-  "/images/slide4.jpg",
-];
-
-const DISPLAY_TIME = 5000; // 5 seconds per image
-const FADE_DURATION = 2000; // 2 seconds fade effect
 
 const ClientSideFeatures = () => {
   const authContext = useContext(AuthContext);
@@ -25,38 +15,51 @@ const ClientSideFeatures = () => {
   const { currentUser } = authContext;
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter(); // Initialize Next.js router
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Image slideshow logic
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, DISPLAY_TIME);
-    return () => clearInterval(interval);
-  }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative z-10 flex flex-col justify-center items-center text-center h-screen w-screen overflow-hidden">
-      {/* Image Slideshow */}
-      <div className="absolute inset-0 -z-10">
-        {images.map((src, index) => (
-          <motion.div
-            key={index}
-            className="absolute inset-0 w-full h-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: index === currentIndex ? 1 : 0 }}
-            transition={{ duration: FADE_DURATION / 1000, ease: "easeInOut" }}
-          >
-            <Image
-              src={src}
-              alt={`Slide ${index}`}
-              fill
-              className="object-cover w-full h-full"
-              priority={index === 0} // Load first image eagerly
-            />
-          </motion.div>
-        ))}
-      </div>
+    <div className="bg-black relative z-10 flex flex-col justify-center items-center text-center h-screen w-screen overflow-hidden text-[#D4D4D4]">
+      {/* Navbar */}
+      <AnimatedGrid/>
+      <nav className="absolute top-0 left-0 w-full flex items-center justify-between p-4 bg-transparent shadow-md">
+        <div className="flex items-center gap-8">
+        <Link href="/">
+  <img 
+    src="/images/4.png" 
+    alt="Logo" 
+    className="h-14 md:h-16 brightness-110 drop-shadow-lg transition-transform transform hover:scale-105"
+  />
+</Link>
+
+          <div className="hidden md:flex gap-8">
+            <Link href="/events" className="text-[#D4D4D4] hover:text-orange-200 transition">Events</Link>
+            <Link href="/about" className="text-[#D4D4D4] hover:text-orange-200 transition">About</Link>
+            <Link href="/contact" className="text-[#D4D4D4] hover:text-orange-200 transition">Contact</Link>
+          </div>
+        </div>
+        <div className="hidden md:flex gap-4">
+          <button className="bg-[#171717] text-[#D4D4D4] px-4 py-1 rounded-full border border-orange-100 font-semibold hover:bg-orange-400 transition">Action</button>
+          {currentUser && (
+            <button className="bg-[#171717] text-[#D4D4D4] px-4 py-1 rounded-full border border-orange-100 font-semibold hover:bg-red-600 transition">Logout</button>
+          )}
+        </div>
+        {/* Mobile Menu */}
+        <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </button>
+      </nav>
+
+      {menuOpen && (
+        <div className="absolute top-16 left-0 w-full bg-[#171717] p-4 flex flex-col items-center gap-4 md:hidden">
+          <Link href="/events" className="text-[#D4D4D4] hover:text-orange-300 transition">Events</Link>
+          <Link href="/about" className="text-[#D4D4D4] hover:text-orange-300 transition">About</Link>
+          <Link href="/contact" className="text-[#D4D4D4] hover:text-orange-300 transition">Contact</Link>
+          <button className="bg-[#171717] text-[#D4D4D4] px-4 py-2 rounded-lg font-semibold hover:bg-orange-400 transition">Action</button>
+          {currentUser && (
+            <button className="bg-[#171717] text-[#D4D4D4] px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition">Logout</button>
+          )}
+        </div>
+      )}
 
       <h1 className="text-4xl md:text-6xl font-bold mb-4">
         Discover. Organize. Experience.
@@ -80,15 +83,8 @@ const ClientSideFeatures = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search for events..."
-          className="px-6 py-3 rounded-lg shadow-md w-1/2 max-w-xl text-black"
+          className="w-full sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-3/4 max-w-4xl py-2 px-4 shadow-md bg-[#171717] border border-orange-200 rounded-full text-[#D4D4D4] focus:outline-none focus:ring-2 focus:ring-orange-300"
         />
-        <button
-          type="submit"
-          aria-label="Search events"
-          className="bg-white/10 text-white px-6 py-3 rounded-lg font-semibold border border-white/20 hover:bg-white/20 transition-all"
-        >
-          🔍
-        </button>
       </form>
 
       {/* Action Buttons */}
@@ -96,26 +92,36 @@ const ClientSideFeatures = () => {
         <Link
           href="/events"
           prefetch={false}
-          className="bg-white ml-3 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
+          className="group bg-[#171717] ml-3 text-orange-300 px-6 py-3 rounded-full font-semibold hover:bg-black hover:text-white border border-orange-100 flex items-center gap-2 transition-all duration-300"
         >
-          Discover Events
+          Discover Events <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
         </Link>
 
         {currentUser ? (
           <Link
             href="/dashboard/organizer"
             prefetch={false}
-            className="bg-white  text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
+            className="group hover:text-orange-300 px-6 py-3 font-semibold text-[#D4D4D4] flex items-center gap-2 transition-all duration-300"
           >
-            Start Organizing
+            Start Organizing 
+            <span 
+              className="group-hover:translate-x-3 group-hover:rotate-[110deg] transition-transform duration-300 inline-block"
+            >
+              →
+            </span>
           </Link>
         ) : (
           <Link
             href="/auth"
             prefetch={false}
-            className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 mr-3"
+            className="group hover:text-orange-300 px-6 py-3 hover:rounded-full font-semibold text-[#D4D4D4] mr-3 flex items-center gap-2 transition-all duration-300"
           >
-            Login to Organize
+            Login to Organize  
+            <span 
+              className="group-hover:translate-x-3 group-hover:-rotate-[30deg] transition-transform duration-300 inline-block"
+            >
+              →
+            </span>
           </Link>
         )}
       </div>

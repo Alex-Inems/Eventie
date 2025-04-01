@@ -1,23 +1,39 @@
-import ClientSideFeatures from "@/components/ClientSideFeatures";
+"use client";
 
-export const metadata = {
-  title: "Eventify - Discover & Organize Events",
-  description: "Find and manage events effortlessly with Eventify.",
-  openGraph: {
-    title: "Eventify - Your All-in-One Event Management Platform",
-    description: "Effortlessly plan, organize, and discover events with Eventify.",
-    images: ["/images/slide1.jpg"],
-  },
-};
+import { motion } from "framer-motion";
+import CardGrid from "@/components/CardGrid";
+import ClientSideFeatures from "@/components/ClientSideFeatures";
+import HowWeHelp from "@/components/HowWeHelp";
 
 const HomePage = () => {
   return (
-    <div className="bg-black relative h-screen overflow-hidden text-white flex flex-col justify-center items-center text-center">
-      {/* Background animation remains untouched */}
-      <div className="absolute inset-0 bg-cover bg-center animate-sliding-bg"></div>
-
+    <div className="bg-black relative min-h-screen overflow-hidden text-white flex flex-col justify-center items-center text-center space-y-16">
       {/* Client-Side Features (Search, Auth, Buttons) */}
-      <ClientSideFeatures />
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true }}
+      >
+        <ClientSideFeatures />
+      </motion.div>
+
+      {/* Card Grid Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }} // Delay to stagger effect
+        viewport={{ once: true }}
+      >
+        <CardGrid />
+      </motion.div><motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }} // Delay to stagger effect
+        viewport={{ once: true }}
+      >
+        <HowWeHelp/>
+      </motion.div>
     </div>
   );
 };
