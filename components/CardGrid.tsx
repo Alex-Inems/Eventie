@@ -24,9 +24,9 @@ const cardsData: CardData[] = [
 ];
 
 const problemData: CardData[] = [
-  { title: "Am I even eligible?", description: "Many people eligible for an ancestral citizenship don’t even know how to confirm their eligibility.", Icon: FaExclamationTriangle },
-  { title: "How would I do it?", description: "How long does it take? How much does it cost? What's the next step? The knowledge can feel almost esoteric.", Icon: FaCompass },
-  { title: "Who can actually help?", description: "Overwhelmed consulates. Ever-changing policies. 'Professionals' who over-charge, over-promise, and under-deliver.", Icon: FaUserFriends },
+  { title: "Where are the good events?", description: "Its hard to find exciting, local events without scrolling endlessly through scattered platforms.", Icon: FaExclamationTriangle },
+  { title: "How do I host one?", description: "From getting attendees to managing logistics, hosting feels overwhelming without the right tools.", Icon: FaCompass },
+  { title: "Who can I trust?", description: "Fake listings, last-minute cancellations, and unreliable organizers make it hard to trust online event platforms.", Icon: FaUserFriends },
 ];
 
 const CardGrid: React.FC = () => {
