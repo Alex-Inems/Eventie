@@ -15,33 +15,33 @@ interface StepData {
 const steps: StepData[] = [
   {
     number: 1,
-    title: "Free Eligibility Check",
+    title: "Discover Events Instantly",
     points: [
-      "Take our quiz (<1 min) to find out if you might be eligible.",
-      "If eligible, you can provide your email and request an invite to AncestryPass.",
-      "We'll email you when your invite is ready.",
+      "Browse curated events across Africa — concerts, tech meetups, fashion shows, and more.",
+      "Filter by city, category, or date to find what fits your vibe.",
+      "Save your favorites and get notified before they start.",
     ],
-    buttonText: "Request an Invite",
+    buttonText: "Start Exploring",
   },
   {
     number: 2,
-    title: "Document Verification",
+    title: "Register or Host with Ease",
     points: [
-      "Upload required documents for verification.",
-      "We review and confirm your eligibility within a few days.",
-      "Receive detailed guidance on next steps.",
+      "Register for events with one click — no hassle, no long forms.",
+      "Want to host? Set up your event, add details, and publish — all in under 5 minutes.",
+      "Manage RSVPs, payments, and updates from your dashboard.",
     ],
-    buttonText: "Start Verification",
+    buttonText: "Join or Host",
   },
   {
     number: 3,
-    title: "Citizenship Application",
+    title: "Engage and Grow",
     points: [
-      "Complete the legal process with our expert guidance.",
-      "Receive your official citizenship documents.",
-      "Enjoy the benefits of dual citizenship.",
+      "Get real-time updates and reminders before events.",
+      "Connect with attendees or organizers before, during, and after the event.",
+      "Build your presence — follow, grow, and stay in the loop on future experiences.",
     ],
-    buttonText: "Apply Now",
+    buttonText: "Get Started",
   },
 ];
 
