@@ -13,14 +13,14 @@ interface CardData {
 }
 
 const cardsData: CardData[] = [
-  { title: "Residency", description: "Permanent right to live in a new country, and up to 27 countries through the European Union.", Icon: FaHome },
-  { title: "Education", description: "Access to free or subsidized education, from K-12 to bachelors and masters degrees.", Icon: FaGraduationCap },
-  { title: "Healthcare", description: "Access to quality health care providers, often for free or heavily subsidized.", Icon: FaHeart },
-  { title: "Employment", description: "Access to job markets across multiple countries, without visas or work permits.", Icon: FaBriefcase },
-  { title: "Mobility", description: "Visa-free travel to more countries. Shorter immigration lines. Easier border crossings.", Icon: FaSuitcase },
-  { title: "Family Rights", description: "Spouses, children, and future generations are often eligible for the same benefits.", Icon: FaUsers },
-  { title: "Peace of mind", description: "A backup plan, especially in times of geopolitical instability and uncertainty.", Icon: FaShieldAlt },
-  { title: "Property Rights", description: "Buy properties in another country with fewer restrictions.", Icon: FaBuilding },
+  { title: "Event Discovery", description: "Easily find events tailored to your interests — from concerts and conferences to festivals and workshops.", Icon: FaHome },
+  { title: "Seamless Registration", description: "Register for events in seconds. No queues. No confusion. Just quick, smooth access.", Icon: FaGraduationCap },
+  { title: "Real-Time Updates", description: "Get instant updates on schedule changes, venue directions, and important notifications.", Icon: FaHeart },
+  { title: "Host With Ease", description: "Plan, promote, and manage events with built-in tools that streamline every part of the hosting process.", Icon: FaBriefcase },
+  { title: "Pan-African Reach", description: "Discover and attend events across African cities with one simple platform — no borders, just connection.", Icon: FaSuitcase },
+  { title: "Community Building", description: "Meet like-minded attendees, form communities, and grow your network organically through shared experiences.", Icon: FaUsers },
+  { title: "Peace of Mind", description: "Secure transactions, verified hosts, and smooth support so your experience is worry-free.", Icon: FaShieldAlt },
+  { title: "Venue Access", description: "Find and book event venues quickly — whether it's a cozy indoor space or a full-scale outdoor arena.", Icon: FaBuilding },
 ];
 
 const problemData: CardData[] = [
