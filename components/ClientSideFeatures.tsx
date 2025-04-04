@@ -52,8 +52,8 @@ const ClientSideFeatures = () => {
       {menuOpen && (
         <div className="absolute top-16 left-0 w-full bg-[#171717] p-4 flex flex-col items-center gap-4 md:hidden">
           <Link href="/events" className="text-[#D4D4D4] hover:text-orange-300 transition">Events</Link>
-          <Link href="/about" className="text-[#D4D4D4] hover:text-orange-300 transition">About</Link>
-          <Link href="/contact" className="text-[#D4D4D4] hover:text-orange-300 transition">Contact</Link>
+          <Link href="/profile" className="text-[#D4D4D4] hover:text-orange-300 transition">Profile</Link>
+          <Link href="/help" className="text-[#D4D4D4] hover:text-orange-300 transition">Help</Link>
           <button className="bg-[#171717] text-[#D4D4D4] px-4 py-2 rounded-lg font-semibold hover:bg-orange-400 transition">Action</button>
           {currentUser && (
             <button className="bg-[#171717] text-[#D4D4D4] px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition">Logout</button>
