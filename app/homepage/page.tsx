@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import CardGrid from "@/components/CardGrid";
 import ClientSideFeatures from "@/components/ClientSideFeatures";
 import HowWeHelp from "@/components/HowWeHelp";
+import Footer from "@/components/Footer";
 
 const HomePage = () => {
   return (
@@ -34,6 +35,7 @@ const HomePage = () => {
       >
         <HowWeHelp/>
       </motion.div>
+      <Footer/>
     </div>
   );
 };
