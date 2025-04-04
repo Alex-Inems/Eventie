@@ -38,7 +38,7 @@ const ClientSideFeatures = () => {
           </div>
         </div>
         <div className="hidden md:flex gap-4">
-          <button className="bg-[#171717] text-[#D4D4D4] px-4 py-1 rounded-full border border-orange-100 font-semibold hover:bg-orange-400 transition">Action</button>
+          
           {currentUser && (
             <button className="bg-[#171717] text-[#D4D4D4] px-4 py-1 rounded-full border border-orange-100 font-semibold hover:bg-red-600 transition">Logout</button>
           )}
