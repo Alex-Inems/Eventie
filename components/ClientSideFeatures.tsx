@@ -33,8 +33,8 @@ const ClientSideFeatures = () => {
 
           <div className="hidden md:flex gap-8">
             <Link href="/events" className="text-[#D4D4D4] hover:text-orange-200 transition">Events</Link>
-            <Link href="/about" className="text-[#D4D4D4] hover:text-orange-200 transition">About</Link>
-            <Link href="/contact" className="text-[#D4D4D4] hover:text-orange-200 transition">Contact</Link>
+            <Link href="/profile" className="text-[#D4D4D4] hover:text-orange-200 transition">Profile</Link>
+            <Link href="/help" className="text-[#D4D4D4] hover:text-orange-200 transition">Help</Link>
           </div>
         </div>
         <div className="hidden md:flex gap-4">
