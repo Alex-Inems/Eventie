@@ -59,6 +59,25 @@ html, body {
     cursor: pointer;
     transition: background-color 0.2s;
   }
+  /* For Webkit browsers */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #111; /* track background */
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+  border-radius: 6px;
+  border: 3px solid #111; /* space around thumb */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color) #111;
+}
+
   
   .page-button.active {
     background-color: #007bff;
