@@ -1,11 +1,11 @@
-"use client";
-
+'use client'
 import { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import AuthContext from "@/context/AuthContext";
 import { getDatabase, ref, get } from "firebase/database";
 import { MdCheckCircle, MdCreate, MdFolderOpen, MdSearch } from "react-icons/md";
 import Image from "next/image";
+import { useDebounce } from "use-debounce"; // Use the use-debounce hook
 
 type Event = {
   id: string;
@@ -29,10 +29,16 @@ const OrganizerDashboardClient = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showCreatedEvents, setShowCreatedEvents] = useState(true);
   const [isVerified, setIsVerified] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state
 
+  // Debounce the search query
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
+
+  // Fetch events only if the user is authenticated
   useEffect(() => {
     if (!currentUser) {
-      router.push("/auth");
+      setLoading(false); // Stop loading when the redirect happens
+      router.push("/auth"); // Redirect to the auth page
       return;
     }
 
@@ -66,26 +72,36 @@ const OrganizerDashboardClient = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Stop loading once data is fetched
       }
     };
 
     fetchData();
   }, [currentUser, router]);
 
+  // Memoized filtered events
   const filteredEvents = useMemo(() => {
-    if (!searchQuery) return events.filter((event) => (showCreatedEvents ? event.organizerId === currentUser?.uid : true));
+    if (!debouncedSearchQuery) {
+      return events.filter((event) => (showCreatedEvents ? event.organizerId === currentUser?.uid : true));
+    }
 
     return events.filter(({ title, date, description, location, time, organizerId }) => {
-      const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        date.includes(searchQuery) ||
-        time.includes(searchQuery) ||
-        location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = title.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        date.includes(debouncedSearchQuery) ||
+        time.includes(debouncedSearchQuery) ||
+        location.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        description.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
       return showCreatedEvents ? matchesSearch && organizerId === currentUser?.uid : matchesSearch;
     });
-  }, [events, searchQuery, showCreatedEvents, currentUser]);
+  }, [events, debouncedSearchQuery, showCreatedEvents, currentUser]);
 
   const navigateTo = useCallback((path: string) => router.push(path), [router]);
+
+  // If loading, show a loading spinner
+  if (loading) {
+    return <div className="text-center">Loading...</div>;
+  }
 
   return (
     <div className="p-4 lg:ml-44 w-full mb-14">
@@ -131,13 +147,12 @@ const OrganizerDashboardClient = () => {
                     : "No Date"}
                 </p>
               </div>
-                    <div className="flex-1 lg:ml-4 text-center">
-
+              <div className="flex-1 lg:ml-4 text-center">
                 <p className="text-sm text-gray-700">{description}</p>
                 <p className="text-xs text-gray-500">{time} • {location}</p>
                 {speakers.length > 0 && <p className="text-xs text-gray-700"><strong>Speakers:</strong> {speakers.join(", ")}</p>}
-                    </div>
-                    <button className={`text-white py-2 px-3 rounded-full shadow-md font-extralight text-xs transition ${organizerId === currentUser?.uid ? "bg-blue-950 hover:bg-blue-700" : "bg-red-950 hover:bg-red-800"}`} onClick={() => navigateTo(`/events/${encodeURIComponent(id)}/${organizerId === currentUser?.uid ? "attendees" : ""}`)}>
+              </div>
+              <button className={`text-white py-2 px-3 rounded-full shadow-md font-extralight text-xs transition ${organizerId === currentUser?.uid ? "bg-blue-950 hover:bg-blue-700" : "bg-red-950 hover:bg-red-800"}`} onClick={() => navigateTo(`/events/${encodeURIComponent(id)}/${organizerId === currentUser?.uid ? "attendees" : ""}`)}>
                 {organizerId === currentUser?.uid ? "View Attendees" : "View Event"}
               </button>
             </li>

@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "axios": "^1.7.9",
+    "buffer": "^6.0.3",
     "firebase": "^11.2.0",
     "framer-motion": "^12.0.1",
     "jspdf": "^2.5.2",
@@ -24,7 +25,8 @@
     "react-icons": "^5.4.0",
     "react-paystack": "^6.0.0",
     "react-qr-code": "^2.0.15",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

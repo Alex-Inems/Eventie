@@ -4,10 +4,21 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
-body {
-  font-family: 'Inter', sans-serif;
-  
+html, body, #__next {
+  height: 100%;
+  overflow-x: hidden; /* prevent horizontal scroll if any */
+  margin: 0;
+  padding: 0;
 }
+
+body {
+  overscroll-behavior-y: contain; /* optional, prevent "rubber band" effect on iOS */
+  font-family: 'Inter', sans-serif;
+}
+
+
+
+
 @keyframes sliding-bg {
   0% { background-image: url('/images/slide.jpg'); }
   33% { background-image: url('/images/slide(2).jpg'); }
