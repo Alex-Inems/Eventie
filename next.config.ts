@@ -1,53 +1,53 @@
+// next.config.js or next.config.ts
 import type { NextConfig } from 'next';
+import withPWA from 'next-pwa';
+import path from 'path';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 const securityHeaders = [
   {
     key: 'Content-Security-Policy',
     value: `
-      default-src * data: blob: 'unsafe-inline' 'unsafe-eval'; 
+      default-src * data: blob: 'unsafe-inline' 'unsafe-eval';
       script-src * data: blob: 'unsafe-inline' 'unsafe-eval';
       style-src * data: blob: 'unsafe-inline' 'unsafe-eval';
-      img-src * data: blob: 'unsafe-inline' 'unsafe-eval';
-      font-src * data: blob: 'unsafe-inline' 'unsafe-eval';
-      frame-src *;
+      img-src * data: blob: 'unsafe-inline';
+      font-src * data:;
       connect-src *;
+      frame-src *;
       media-src *;
-      object-src * data;
-      worker-src * data: blob: 'unsafe-inline' 'unsafe-eval';
+      object-src 'none';
+      worker-src * data: blob:;
       manifest-src *;
-    `.replace(/\n/g, '')
-  }
+    `.replace(/\n/g, ''),
+  },
 ];
 
-const nextConfig: NextConfig = {
+const baseConfig: NextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com', // ✅ Google Auth Images
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com', // ✅ Unsplash Images
-      },
-      {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com', // ✅ Firebase Storage
-      },
-      {
-        protocol: 'https',
-        hostname: 'checkout.paystack.com', // ✅ Paystack Script
-      },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
+      { protocol: 'https', hostname: 'checkout.paystack.com' },
     ],
   },
   async headers() {
     return [
       {
         source: '/(.*)',
-        headers: securityHeaders
+        headers: securityHeaders,
       },
     ];
   },
 };
 
-export default nextConfig;
+const withPWAFunc = withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: isDev,
+});
+
+export default withPWAFunc(baseConfig);
