@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import "./globals.css";
 
 import { AuthProvider } from "@/context/AuthProvider"; // Ensure correct path
+import DynamicThemeColor from "@/components/DynamicThemeColor";
 
 export const metadata: Metadata = {
   title: "at your tips...",
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
+        <DynamicThemeColor />
           {children} {/* Render child components/pages here */}
         </AuthProvider>
       </body>
