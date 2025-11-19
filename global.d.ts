@@ -12,10 +12,12 @@ interface PaystackConfig {
   key: string;
   email: string;
   amount: number;
-  currency: string;
+  currency?: string;
   ref: string;
   callback: (response: PaystackResponse) => void;
   onClose: () => void;
+  channels?: string[];
+  metadata?: Record<string, unknown>;
 }
 
 interface PaystackResponse {

@@ -10,24 +10,6 @@ import { HiTicket, HiCheckCircle, HiClock, HiUserGroup, HiArrowLeft, HiMapPin, H
 import { useRouter } from 'next/navigation';
 import SmartImage from '@/components/SmartImage';
 
-declare global {
-  interface Window {
-    PaystackPop: {
-      setup: (config: {
-        key: string;
-        email: string;
-        amount: number;
-        currency?: string;
-        ref: string;
-        callback: (response: { status: string; reference: string }) => void;
-        onClose: () => void;
-        channels?: string[];
-        metadata?: Record<string, unknown>;
-      }) => { openIframe: () => void };
-    };
-  }
-}
-
 type Ticket = {
   type: string;
   price: string;
