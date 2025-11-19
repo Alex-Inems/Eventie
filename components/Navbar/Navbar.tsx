@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { auth } from '../../firebaseConfig';
 import { signOut } from 'firebase/auth';
-import Image from 'next/image';
+import SmartImage from '../SmartImage';
 
 // Define the structure of navigation links
 interface NavLink {
@@ -115,16 +115,15 @@ const Navbar = () => {
             ))}
             {currentUser ? (
               <div className="flex items-center space-x-4">
-                {currentUser.photoURL && (
-                  <Image
-                    src={currentUser.photoURL}
-                    alt="Profile Picture"
-                    className="rounded-full"
-                    width={40}
-                    height={40}
-                    priority
-                  />
-                )}
+                <SmartImage
+                  src={currentUser.photoURL}
+                  alt="Profile Picture"
+                  className="rounded-full"
+                  width={40}
+                  height={40}
+                  priority
+                  fallbackSrc="/images/default-profile.jpeg"
+                />
                 <span className="text-white">{currentUser.displayName || 'User'}</span>
                 <button
                   onClick={handleSignOut}

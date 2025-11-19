@@ -1,43 +1,33 @@
-"use client";
-
-import { motion } from "framer-motion";
+import type { Metadata } from "next";
 import CardGrid from "@/components/CardGrid";
 import ClientSideFeatures from "@/components/ClientSideFeatures";
 import HowWeHelp from "@/components/HowWeHelp";
+import Testimonials from "@/components/Testimonials";
+import CallToAction from "@/components/CallToAction";
 import Footer from "@/components/Footer";
 
-const HomePage = () => {
-  return (
-    <div className="bg-black relative min-h-screen overflow-hidden text-white flex flex-col justify-center items-center text-center space-y-16">
-      {/* Client-Side Features (Search, Auth, Buttons) */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        viewport={{ once: true }}
-      >
-        <ClientSideFeatures />
-      </motion.div>
-
-      {/* Card Grid Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }} // Delay to stagger effect
-        viewport={{ once: true }}
-      >
-        <CardGrid />
-      </motion.div><motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }} // Delay to stagger effect
-        viewport={{ once: true }}
-      >
-        <HowWeHelp/>
-      </motion.div>
-      <Footer/>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Eventie | Discover, plan, and scale unforgettable events",
+  description:
+    "Search curated experiences, manage registrations, and run production-ready events with Eventie’s collaborative tooling.",
+  openGraph: {
+    title: "Eventie | Discover, plan, and scale unforgettable events",
+    description:
+      "Search curated experiences, manage registrations, and run production-ready events with Eventie’s collaborative tooling.",
+    url: "https://eventie.app",
+    type: "website",
+  },
 };
+
+const HomePage = () => (
+  <main className="bg-black text-white min-h-screen">
+    <ClientSideFeatures />
+    <CardGrid />
+    <HowWeHelp />
+    <Testimonials />
+    <CallToAction />
+    <Footer />
+  </main>
+);
 
 export default HomePage;

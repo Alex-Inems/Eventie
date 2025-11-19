@@ -1,6 +1,7 @@
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthProvider";
 import DynamicThemeColor from "@/components/DynamicThemeColor";
+import ToastProvider from "@/components/ToastProvider";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <DynamicThemeColor />
+          <ToastProvider />
           {children}
         </AuthProvider>
       </body>

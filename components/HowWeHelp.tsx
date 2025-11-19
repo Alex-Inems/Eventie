@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import AnimatedGrid from "./AnimatedGridBackground";
 
 interface StepData {
@@ -10,127 +11,213 @@ interface StepData {
   title: string;
   points: string[];
   buttonText: string;
+  ctaHref: string;
 }
 
 const steps: StepData[] = [
   {
     number: 1,
-    title: "Discover Events Instantly",
+    title: "Discover events instantly",
     points: [
-      "Browse curated events across Africa — concerts, tech meetups, fashion shows, and more.",
-      "Filter by city, category, or date to find what fits your vibe.",
-      "Save your favorites and get notified before they start.",
+      "Curated lists by genre, price, and city with saved searches.",
+      "Smart recommendations that learn from your activity.",
+      "Calendar exports and crew reminders keep everyone in sync.",
     ],
-    buttonText: "Start Exploring",
+    buttonText: "Start exploring",
+    ctaHref: "/events",
   },
   {
     number: 2,
-    title: "Register or Host with Ease",
+    title: "Register or host with ease",
     points: [
-      "Register for events with one click — no hassle, no long forms.",
-      "Want to host? Set up your event, add details, and publish — all in under 5 minutes.",
-      "Manage RSVPs, payments, and updates from your dashboard.",
+      "Spin up branded landing pages with schedule blocks and FAQs.",
+      "Automate RSVPs, table management, and onsite check-in.",
+      "Sync payouts with finance tools via connected workflows.",
     ],
-    buttonText: "Join or Host",
+    buttonText: "Launch an event",
+    ctaHref: "/dashboard/organizer",
   },
   {
     number: 3,
-    title: "Engage and Grow",
+    title: "Engage and grow",
     points: [
-      "Get real-time updates and reminders before events.",
-      "Connect with attendees or organizers before, during, and after the event.",
-      "Build your presence — follow, grow, and stay in the loop on future experiences.",
+      "Segmented updates and push reminders keep seats filled.",
+      "Collect NPS, qualitative feedback, and sponsor-ready recaps.",
+      "Convert attendees into members with loyalty journeys.",
     ],
-    buttonText: "Get Started",
+    buttonText: "Activate audience",
+    ctaHref: "/help",
+  },
+];
+
+const metrics = [
+  { value: "6 mins", label: "avg time to publish" },
+  { value: "3x", label: "faster attendee comms" },
+  { value: "92%", label: "repeat organizers" },
+];
+
+const signals = [
+  {
+    title: "Risk-free launch",
+    description:
+      "Compliance docs, payouts, and ops logs live with the event so audits take minutes.",
+  },
+  {
+    title: "Connected stakeholders",
+    description:
+      "Vendors, security, and sponsors access the same source of truth with role-based controls.",
   },
 ];
 
 const HowWeHelp: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(1);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const stepElements = document.querySelectorAll(".step-card");
-      stepElements.forEach((step, index) => {
-        const rect = step.getBoundingClientRect();
-        if (rect.top < window.innerHeight / 2 && rect.bottom > 100) {
-          setActiveIndex(index + 1);
-        }
-      });
-    };
+    const elements = cardRefs.current.filter(
+      (node): node is HTMLDivElement => Boolean(node)
+    );
+    if (!elements.length) return;
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const step = Number(entry.target.getAttribute("data-step"));
+            setActiveIndex(step);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="relative w-full px-4 md:px-10 py-16 text-white flex flex-col items-center overflow-hidden">
-      {/* Background Animation (Ensure it's behind but visible) */}
-      <div className="absolute top-0 left-0 w-full h-full z-0">
+    <section className="relative overflow-hidden bg-[#040404] px-4 py-24 text-white sm:px-6 lg:px-8">
+      <div className="absolute inset-0 opacity-60">
         <AnimatedGrid />
       </div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,146,60,0.15),_transparent_55%)]" />
 
-      {/* Content Wrapper (Ensure it's above the animation) */}
-      <div className="relative z-10 w-full">
-        {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          How We Help
-        </h2>
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <div className="grid gap-12 lg:grid-cols-[320px_minmax(0,1fr)]">
+          <div className="space-y-6">
+            <div>
+              <p className="text-sm uppercase tracking-[0.4em] text-orange-200">
+                Operating system
+              </p>
+              <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
+                How we help you ship unforgettable experiences
+              </h2>
+              <p className="mt-4 text-sm text-gray-300">
+                This is the end-to-end playbook used by our top organizers —
+                from scoping to post-event monetization.
+              </p>
+            </div>
 
-        {/* Steps List */}
-        <div className="flex flex-col gap-8">
-          {steps.map((step) => (
-            <motion.div
-              key={step.number}
-              className="relative step-card border border-gray-700 bg-black/70 backdrop-blur-md rounded-xl p-6 md:p-10 mx-auto flex flex-col md:flex-row justify-between items-center gap-6 overflow-hidden"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: step.number * 0.2 }}
-            >
-              {/* Background Fading Check Animation */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-green-500 to-transparent opacity-20"
-                animate={{
-                  opacity: activeIndex === step.number ? 0.4 : 0.1,
-                  scale: activeIndex === step.number ? 1.1 : 1,
-                }}
-                transition={{ duration: 0.5 }}
-              ></motion.div>
-
-              {/* Step Number (Changes Color on Scroll) */}
-              <motion.div
-                className="absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full border-2"
-                animate={{ borderColor: activeIndex === step.number ? "#00C896" : "#555" }}
-                transition={{ duration: 0.3 }}
-                style={{ backgroundColor: "#222" }}
-              >
-                <span className="text-white text-lg font-bold">{step.number}</span>
-              </motion.div>
-
-              {/* Left: Step Text */}
-              <div className="flex-1 relative">
-                <h3 className="text-xl md:text-2xl font-semibold mb-4">{step.title}</h3>
-                <ul className="text-gray-400 space-y-2">
-                  {step.points.map((point, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <FaCheckCircle className="text-white text-lg" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+              <p className="text-xs uppercase tracking-[0.35em] text-gray-300">
+                Proven impact
+              </p>
+              <div className="mt-4 grid gap-4">
+                {metrics.map((metric) => (
+                  <div key={metric.label}>
+                    <p className="text-3xl font-semibold">{metric.value}</p>
+                    <p className="text-xs uppercase tracking-[0.35em] text-gray-400">
+                      {metric.label}
+                    </p>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              {/* Right: Step Button */}
-              <div className="flex justify-end md:ml-6">
-                <button className="px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg flex items-center gap-2 transition">
-                  {step.buttonText} →
-                </button>
+            <div className="rounded-3xl border border-white/5 bg-black/50 p-6">
+              <p className="text-sm font-semibold text-white">Playbook deliverables</p>
+              <ul className="mt-3 space-y-2 text-sm text-gray-300">
+                <li>• Templates for launch briefs, run-of-show, and partner decks</li>
+                <li>• Automations covering tickets, payouts, and compliance</li>
+                <li>• Embedded analytics for every stakeholder</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-10">
+            <div className="relative">
+              <div className="pointer-events-none absolute left-7 top-0 hidden h-full w-px bg-gradient-to-b from-orange-300/40 via-white/20 to-transparent lg:block" />
+              <div className="space-y-6">
+                {steps.map((step, index) => (
+                  <motion.div
+                    key={step.number}
+                    data-step={step.number}
+                    ref={(node) => {
+                      cardRefs.current[index] = node;
+                    }}
+                    className="relative rounded-3xl border border-white/10 bg-black/70 p-6 backdrop-blur md:p-8"
+                    initial={{ opacity: 0, y: 60 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <motion.span
+                      className="absolute -left-1 -top-1 flex h-10 w-10 items-center justify-center rounded-2xl border-2 text-base font-semibold"
+                      animate={{
+                        borderColor:
+                          activeIndex === step.number
+                            ? "rgba(251,146,60,1)"
+                            : "rgba(255,255,255,0.2)",
+                        color:
+                          activeIndex === step.number
+                            ? "rgba(255,255,255,1)"
+                            : "rgba(255,255,255,0.8)",
+                        scale: activeIndex === step.number ? 1.05 : 1,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {step.number}
+                    </motion.span>
+                    <div className="md:flex md:items-start md:justify-between md:gap-8">
+                      <div className="md:flex-1">
+                        <h3 className="text-2xl font-semibold">{step.title}</h3>
+                        <ul className="mt-4 space-y-3 text-sm text-gray-300">
+                          {step.points.map((point) => (
+                            <li key={point} className="flex items-start gap-3">
+                              <FaCheckCircle className="mt-0.5 text-orange-200" />
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <Link
+                        href={step.ctaHref}
+                        className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:border-white md:mt-0"
+                      >
+                        {step.buttonText}
+                        <span aria-hidden>→</span>
+                      </Link>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
-          ))}
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {signals.map((signal) => (
+                <div
+                  key={signal.title}
+                  className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-transparent to-black/60 p-5 text-sm text-gray-300"
+                >
+                  <p className="text-base font-semibold text-white">{signal.title}</p>
+                  <p className="mt-2">{signal.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

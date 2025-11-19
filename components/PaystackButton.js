@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import AuthContext from "@/context/AuthContext";
 import { db } from "@/firebaseConfig"; // Firebase import
 import { ref, get } from "firebase/database"; // Realtime Database functions
+import { toast } from 'react-toastify';
 
 export default function PaystackButton() {
     const [loading, setLoading] = useState(false);
@@ -55,12 +56,12 @@ export default function PaystackButton() {
 
     const handlePayment = async () => {
         if (!email) {
-            alert("User email is required for payment.");
+            toast.error("User email is required for payment.");
             return;
         }
 
         if (!amount) {
-            alert("Invalid ticket amount.");
+            toast.error("Invalid ticket amount.");
             return;
         }
 

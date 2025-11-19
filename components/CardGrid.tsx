@@ -1,10 +1,18 @@
 import React from "react";
 import { IconType } from "react-icons";
-import { 
-  FaHome, FaGraduationCap, FaBriefcase, FaHeart, 
-  FaSuitcase, FaUsers, FaShieldAlt, FaBuilding 
+import {
+  FaHome,
+  FaGraduationCap,
+  FaBriefcase,
+  FaHeart,
+  FaSuitcase,
+  FaUsers,
+  FaShieldAlt,
+  FaBuilding,
+  FaExclamationTriangle,
+  FaCompass,
+  FaUserFriends,
 } from "react-icons/fa";
-import { FaExclamationTriangle, FaCompass, FaUserFriends } from "react-icons/fa";
 
 interface CardData {
   title: string;
@@ -13,91 +21,164 @@ interface CardData {
 }
 
 const cardsData: CardData[] = [
-  { title: "Event Discovery", description: "Easily find events tailored to your interests — from concerts and conferences to festivals and workshops.", Icon: FaHome },
-  { title: "Seamless Registration", description: "Register for events in seconds. No queues. No confusion. Just quick, smooth access.", Icon: FaGraduationCap },
-  { title: "Real-Time Updates", description: "Get instant updates on schedule changes, venue directions, and important notifications.", Icon: FaHeart },
-  { title: "Host With Ease", description: "Plan, promote, and manage events with built-in tools that streamline every part of the hosting process.", Icon: FaBriefcase },
-  { title: "Pan-African Reach", description: "Discover and attend events across African cities with one simple platform — no borders, just connection.", Icon: FaSuitcase },
-  { title: "Community Building", description: "Meet like-minded attendees, form communities, and grow your network organically through shared experiences.", Icon: FaUsers },
-  { title: "Peace of Mind", description: "Secure transactions, verified hosts, and smooth support so your experience is worry-free.", Icon: FaShieldAlt },
-  { title: "Venue Access", description: "Find and book event venues quickly — whether it's a cozy indoor space or a full-scale outdoor arena.", Icon: FaBuilding },
+  {
+    title: "Event discovery",
+    description:
+      "Personalized recommendations, collaborative wishlists, and location-aware alerts keep your calendar full.",
+    Icon: FaHome,
+  },
+  {
+    title: "Seamless registration",
+    description:
+      "Automated waitlists, multi-currency checkout, and QR-code verification out of the box.",
+    Icon: FaGraduationCap,
+  },
+  {
+    title: "Real-time updates",
+    description:
+      "Push schedule changes, routing notes, and sponsor shoutouts to every ticket holder instantly.",
+    Icon: FaHeart,
+  },
+  {
+    title: "Host with ease",
+    description:
+      "Plan, promote, and reconcile payouts from a single dashboard with audit-ready logs.",
+    Icon: FaBriefcase,
+  },
+  {
+    title: "Pan-African reach",
+    description:
+      "Activate audiences across Lagos, Nairobi, Accra, Jozi and beyond—without spinning up new tooling.",
+    Icon: FaSuitcase,
+  },
+  {
+    title: "Community building",
+    description:
+      "Keep members warm with journeys, DMs, and exclusive drops that live alongside your events.",
+    Icon: FaUsers,
+  },
+  {
+    title: "Peace of mind",
+    description:
+      "Fraud prevention, dispute workflows, and dedicated human support when you need it.",
+    Icon: FaShieldAlt,
+  },
+  {
+    title: "Venue access",
+    description:
+      "Match with verified venues and automate paperwork, insurance, and payouts.",
+    Icon: FaBuilding,
+  },
 ];
 
 const problemData: CardData[] = [
-  { title: "Where are the good events?", description: "Its hard to find exciting, local events without scrolling endlessly through scattered platforms.", Icon: FaExclamationTriangle },
-  { title: "How do I host one?", description: "From getting attendees to managing logistics, hosting feels overwhelming without the right tools.", Icon: FaCompass },
-  { title: "Who can I trust?", description: "Fake listings, last-minute cancellations, and unreliable organizers make it hard to trust online event platforms.", Icon: FaUserFriends },
+  {
+    title: "Where are the good events?",
+    description:
+      "Scattered listings, outdated info, and poor filtering waste hours every week.",
+    Icon: FaExclamationTriangle,
+  },
+  {
+    title: "How do I host one?",
+    description:
+      "From acquiring attendees to balancing budgets, teams juggle eight different tools.",
+    Icon: FaCompass,
+  },
+  {
+    title: "Who can I trust?",
+    description:
+      "Fake listings and last-minute cancellations erode confidence for both attendees and partners.",
+    Icon: FaUserFriends,
+  },
+];
+
+const trustedBy = [
+  "AfroTech Labs",
+  "Jozi Collective",
+  "Vibes In Lagos",
+  "DevCon Accra",
+  "House Of Art",
 ];
 
 const CardGrid: React.FC = () => {
   return (
-    <div className="bg-black w-full px-6 md:px-10 py-16 text-white flex flex-col items-center">
-      {/* Title Section */}
-      <h2 className="text-2xl md:text-4xl font-bold mb-8 md:mb-12 text-center">What are the benefits?</h2>
+    <section className="w-full bg-black px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="text-center">
+          <p className="text-sm uppercase tracking-[0.4em] text-orange-200">
+            Why Eventie
+          </p>
+          <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
+            Everything you need to go from idea to sold-out
+          </h2>
+          <p className="mt-3 text-gray-400">
+            Each feature is designed to remove friction for attendees, partners,
+            and internal ops teams.
+          </p>
+        </div>
 
-      {/* Benefits Card Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-0 w-full max-w-screen-xl">
-        {cardsData.map((card, index) => {
-          const isTopRow = index < 4;
-          const isBottomRow = index >= 4;
-
-          return (
-            <div
-              key={index}
-              className="relative px-6 py-6 md:px-7 md:py-8 flex flex-col text-left w-full transition-all duration-300"
-              style={{
-                border: "1px solid rgba(170, 170, 170, 0.3)",
-                borderTop: isTopRow ? "none" : "1px solid rgba(170, 170, 170, 0.3)",
-                borderBottom: isBottomRow ? "none" : "1px solid rgba(170, 170, 170, 0.3)",
-                borderLeft: index % 2 === 0 ? "none" : "1px solid rgba(170, 170, 170, 0.3)",
-                borderRight: index % 2 === 1 ? "none" : "1px solid rgba(170, 170, 170, 0.3)",
-              }}
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {cardsData.map((card) => (
+            <article
+              key={card.title}
+              className="rounded-2xl border border-white/5 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-white/20"
             >
-              {/* Hover Effect */}
-              <div
-                className={`absolute inset-0 opacity-0 transition-all duration-300`}
-                style={{
-                  background: isTopRow
-                    ? "linear-gradient(to bottom, rgba(255, 255, 255, 0.08), transparent)"
-                    : "linear-gradient(to top, rgba(255, 255, 255, 0.08), transparent)",
-                }}
-              ></div>
-
-              {/* Icon + Title */}
-              <div className="flex items-center gap-2 mb-3">
-                <card.Icon className="text-white text-lg" />
-                <h3 className="text-sm md:text-base font-semibold">{card.title}</h3>
-              </div>
-
-              {/* Description */}
-              <p className="text-gray-400 text-xs md:text-sm leading-relaxed">{card.description}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Problem Section */}
-      <div className="mt-16 md:mt-20 w-full max-w-screen-lg text-center">
-        <h2 className="text-2xl md:text-4xl font-bold mb-4">What’s the Problem?</h2>
-        <p className="text-gray-400 mb-6 md:mb-8">Citizenship through ancestry is a legal right, but barriers can make it difficult to claim.</p>
-
-        {/* Problem Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {problemData.map((problem, index) => (
-            <div
-              key={index}
-              className="p-4 md:p-6 rounded-lg border border-gray-700 text-left bg-black transition-all duration-300"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <problem.Icon className="text-white text-lg" />
-                <h3 className="text-base md:text-lg font-semibold">{problem.title}</h3>
-              </div>
-              <p className="text-gray-400 text-sm md:text-base">{problem.description}</p>
-            </div>
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-lg text-orange-200">
+                <card.Icon />
+              </span>
+              <h3 className="mt-4 text-xl font-semibold">{card.title}</h3>
+              <p className="mt-2 text-sm text-gray-300">{card.description}</p>
+            </article>
           ))}
+
+          <article className="rounded-2xl border border-orange-400/30 bg-gradient-to-br from-orange-500/10 via-rose-500/5 to-transparent p-6 lg:col-span-3">
+            <p className="text-sm uppercase tracking-[0.4em] text-orange-200">
+              Trusted by
+            </p>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-4 text-sm text-gray-300">
+              {trustedBy.map((brand) => (
+                <span key={brand} className="font-semibold tracking-wide">
+                  {brand}
+                </span>
+              ))}
+            </div>
+          </article>
+        </div>
+
+        <div className="mt-20 rounded-3xl border border-white/5 bg-gradient-to-br from-white/5 via-transparent to-white/5 p-8">
+          <div className="text-center">
+            <p className="text-sm uppercase tracking-[0.4em] text-orange-200">
+              The gap
+            </p>
+            <h3 className="mt-4 text-2xl font-semibold">
+              The problems Eventie solves
+            </h3>
+            <p className="mt-3 text-gray-400">
+              We listened to hundreds of organizers before shipping a single
+              feature.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {problemData.map((problem) => (
+              <article
+                key={problem.title}
+                className="rounded-2xl border border-white/10 bg-black/60 p-5"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full bg-white/10 p-3 text-orange-200">
+                    <problem.Icon />
+                  </span>
+                  <h4 className="text-lg font-semibold">{problem.title}</h4>
+                </div>
+                <p className="mt-3 text-sm text-gray-300">
+                  {problem.description}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -6,26 +6,27 @@ import { useAuth } from "@/context/AuthContext"; // Use auth context for logout
 
 const Mobilenav = () => {
   const router = useRouter();
-  const { logout } = useAuth(); // Get logout function
+  const { logout } = useAuth();
+
+  const items = [
+    { label: "Dashboard", icon: MdDashboard, action: () => router.push("/dashboard/organizer") },
+    { label: "Create", icon: MdCreate, action: () => router.push("/organizer/create-event") },
+    { label: "Profile", icon: MdSupervisorAccount, action: () => router.push("/profile") },
+    { label: "Logout", icon: MdLogout, action: logout },
+  ];
 
   return (
-    <div className="mt-6 border-t-2 border-gray-200 lg:hidden fixed bottom-0 left-0 right-0 bg-white text-gray-500 p-4 flex justify-around items-center shadow-lg">
-      <button onClick={() => router.push("/dashboard/organizer")} className="flex flex-col items-center">
-        <MdDashboard />
-        <span className="text-xs">Dashboard</span>
-      </button>
-      <button onClick={() => router.push("/organizer/create-event")} className="flex flex-col items-center">
-        <MdCreate />
-        <span className="text-xs">Create</span>
-      </button>
-      <button onClick={() => router.push("/profile")} className="flex flex-col items-center">
-        <MdSupervisorAccount />
-        <span className="text-xs">Profile</span>
-      </button>
-      <button onClick={logout} className="flex flex-col items-center">
-        <MdLogout />
-        <span className="text-xs">Logout</span>
-      </button>
+    <div className="fixed bottom-4 left-1/2 z-20 flex w-[90%] max-w-md -translate-x-1/2 justify-between rounded-3xl border border-white/10 bg-black/70 px-6 py-3 text-white backdrop-blur lg:hidden">
+      {items.map((item) => (
+        <button
+          key={item.label}
+          onClick={item.action}
+          className="flex flex-col items-center text-xs font-semibold text-gray-300 transition hover:text-white"
+        >
+          <item.icon className="text-lg" />
+          {item.label}
+        </button>
+      ))}
     </div>
   );
 };

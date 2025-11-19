@@ -8,10 +8,10 @@ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObjec
 import { CheckCircleIcon } from '@heroicons/react/20/solid';
 import Sidebar from '@/components/Sidebar';
 import Mobilenav from '@/components/Mobilenav';
-import Image from 'next/image';
+import SmartImage from '@/components/SmartImage';
 
 const DEFAULT_PROFILE_PIC = '/images/default-profile.jpeg'; // Path to default profile image
-const DEFAULT_COVER_PIC = '/images/default-profile.jpeg'; // Path to default cover image
+const DEFAULT_COVER_PIC = '/images/slide4.jpg'; // Path to default cover image
 
 // Define interface for UserUpdates
 interface UserUpdates {
@@ -30,25 +30,25 @@ const ProfilePage = () => {
   const user = auth.currentUser;
 
   // State declarations
-  const [userName, setUserName] = useState(''); 
-  const [name, setName] = useState<string>(''); 
-  const [email, setEmail] = useState<string>(''); 
-  const [profilePic, setProfilePic] = useState<string>(''); 
-  const [coverPic, setCoverPic] = useState<string>(''); 
-  const [newProfilePic, setNewProfilePic] = useState<File | null>(null); 
-  const [newCoverPic, setNewCoverPic] = useState<File | null>(null); 
-  const [bio, setBio] = useState<string>(''); 
-  const [location, setLocation] = useState<string>(''); 
+  const [userName, setUserName] = useState('');
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [profilePic, setProfilePic] = useState<string>('');
+  const [coverPic, setCoverPic] = useState<string>('');
+  const [newProfilePic, setNewProfilePic] = useState<File | null>(null);
+  const [newCoverPic, setNewCoverPic] = useState<File | null>(null);
+  const [bio, setBio] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
   const [socialLinks, setSocialLinks] = useState<{ twitter: string; linkedin: string }>({ twitter: '', linkedin: '' });
 
-  const [loading, setLoading] = useState<boolean>(true); 
-  const [saving, setSaving] = useState<boolean>(false); 
-  const [removingPic, setRemovingPic] = useState<boolean>(false); 
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [removingPic, setRemovingPic] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
-  
+
   // Fetch user data and update state
   useEffect(() => {
     if (!user) {
@@ -206,177 +206,171 @@ const ProfilePage = () => {
     return twitterPattern.test(links.twitter) && linkedinPattern.test(links.linkedin);
   };
 
- 
+
   // Centered milky spinner while loading
-  if (loading ) {
+  if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-white/30 backdrop-blur-md">
-        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex h-screen items-center justify-center bg-[#040404] text-white">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/20 border-t-white" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col lg:flex-row bg-gray-50">
-      {/* Left Sidebar */}
-      <Sidebar/>
-      {/* Main Content */}
-      <div className="flex-1 p-6 lg:ml-44 max-w-screen-lg mx-auto mb-14">
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">Profile</h1>
-
-          {/* Toast message */}
+    <main className="relative min-h-screen bg-[#040404] text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,146,60,0.1),_transparent_60%)]" />
+      <div className="relative z-10 flex flex-col lg:flex-row">
+        <Sidebar />
+        <section className="flex-1 px-4 py-12 lg:ml-[320px] lg:px-12">
           {toastMessage && (
-          <div
-            className={`p-4 mb-4 rounded-md fixed top-0 left-0 w-full z-50 ${toastType === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
-          >
-            {toastMessage}
-          </div>
-        )}
+            <div
+              className={`mb-6 rounded-2xl border px-4 py-3 text-sm ${toastType === 'success' ? 'border-green-500 bg-green-500/10 text-green-200' : 'border-red-500 bg-red-500/10 text-red-200'
+                }`}
+            >
+              {toastMessage}
+            </div>
+          )}
 
-        {/* Cover Image */}
-        <div className="mb-8 relative">
-          <Image
-            src={coverPic}
-            alt="Cover"
-            className="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-cover rounded-lg shadow-lg mb-4"
-            width={1200} // specify width
-            height={500} // specify height
-          />
-
-          {/* Input and Button Below */}
-          <div className="mt-4 flex justify-between items-center">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleCoverPicChange}
-              className="bg-white p-2 rounded-md shadow-md cursor-pointer w-full sm:w-auto"
-            />
-            {coverPic !== DEFAULT_COVER_PIC && (
-              <button
-                onClick={removeCoverPic}
-                disabled={removingPic}
-                className="ml-4 bg-red-600 text-white px-4 py-2 rounded-md text-xs shadow-md hover:bg-red-700 transition"
-              >
-                {removingPic ? 'Removing...' : 'Remove Cover'}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Profile Picture */}
-<div className="flex items-center space-x-6 mb-8">
-  <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
-    <Image
-      src={profilePic}
-      alt="Profile"
-      className="w-full h-full rounded-full object-cover shadow-lg border-4 border-white"
-      width={96} // specify width
-      height={96} // specify height
-    />
-  </div>
-
-  {isVerified && <CheckCircleIcon className="h-6 w-6 text-green-500" />}
-  
-  <div className="flex flex-col">
-    <h2 className="text-xl font-semibold">{userName}</h2>
-    <div className="text-sm text-gray-500">{email}</div>
-
-    <div className="flex flex-col sm:flex-row sm:space-x-4 mt-4">
-      <button
-        onClick={removeProfilePic}
-        disabled={removingPic}
-        className="bg-red-600 text-white px-4 py-2 rounded-md text-xs shadow-md hover:bg-red-700 transition w-full sm:w-auto"
-      >
-        {removingPic ? 'Removing...' : 'Remove Profile'}
-      </button>
-
-      {/* Add Profile Picture */}
-      {profilePic === DEFAULT_PROFILE_PIC && (
-        <div className="mt-4 sm:mt-0">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleProfilePicChange}
-            className="bg-white p-2 rounded-md shadow-md cursor-pointer w-full sm:w-auto"
-          />
-        </div>
-      )}
-    </div>
-  </div>
-</div>
-
-        {/* Form */}
-        <div className="space-y-4">
-          <div>
-            <label className="text-sm text-gray-600">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full mt-2 p-3 border border-gray-300 rounded-md shadow-md"
-            />
+          <div className="overflow-hidden rounded-3xl border border-white/10 bg-black/70">
+            <div className="relative h-56 w-full">
+              <SmartImage src={coverPic} alt="Cover" fill className="object-cover" fallbackSrc={DEFAULT_COVER_PIC} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+            </div>
+            <div className="flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative h-24 w-24">
+                  <SmartImage
+                    src={profilePic}
+                    alt="Profile"
+                    fill
+                    className="rounded-3xl border-4 border-black object-cover"
+                    fallbackSrc={DEFAULT_PROFILE_PIC}
+                  />
+                  {isVerified && (
+                    <CheckCircleIcon className="absolute -bottom-1 -right-1 h-6 w-6 text-green-400" />
+                  )}
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-gray-400">Organizer</p>
+                  <h1 className="mt-1 text-2xl font-semibold">{userName}</h1>
+                  <p className="text-sm text-gray-400">{email}</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <label className="cursor-pointer rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white">
+                  Update cover
+                  <input type="file" accept="image/*" onChange={handleCoverPicChange} className="hidden" />
+                </label>
+                {coverPic !== DEFAULT_COVER_PIC && (
+                  <button
+                    onClick={removeCoverPic}
+                    disabled={removingPic}
+                    className="rounded-full border border-red-400/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-red-200 transition hover:border-red-400 disabled:opacity-70"
+                  >
+                    {removingPic ? 'Removing...' : 'Remove cover'}
+                  </button>
+                )}
+                <label className="cursor-pointer rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white">
+                  Update avatar
+                  <input type="file" accept="image/*" onChange={handleProfilePicChange} className="hidden" />
+                </label>
+                {profilePic !== DEFAULT_PROFILE_PIC && (
+                  <button
+                    onClick={removeProfilePic}
+                    disabled={removingPic}
+                    className="rounded-full border border-red-400/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-red-200 transition hover:border-red-400 disabled:opacity-70"
+                  >
+                    {removingPic ? 'Removing...' : 'Remove avatar'}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="text-sm text-gray-600">Bio</label>
-            <textarea
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              required
-              className="w-full mt-2 p-3 border border-gray-300 rounded-md shadow-md"
-              rows={4}
-            />
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
+            <div className="rounded-3xl border border-white/10 bg-black/70 p-6">
+              <p className="text-xs uppercase tracking-[0.35em] text-gray-400">Identity</p>
+              <div className="mt-6 space-y-5">
+                <div>
+                  <label htmlFor="profile-name" className="text-xs uppercase tracking-[0.3em] text-gray-400">Name</label>
+                  <input
+                    id="profile-name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-orange-200 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="profile-location" className="text-xs uppercase tracking-[0.3em] text-gray-400">Location</label>
+                  <input
+                    id="profile-location"
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    required
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-orange-200 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="profile-bio" className="text-xs uppercase tracking-[0.3em] text-gray-400">Bio</label>
+                  <textarea
+                    id="profile-bio"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    required
+                    rows={4}
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-orange-200 focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-black/70 p-6">
+              <p className="text-xs uppercase tracking-[0.35em] text-gray-400">Presence</p>
+              <div className="mt-6 space-y-5">
+                <div>
+                  <label htmlFor="profile-twitter" className="text-xs uppercase tracking-[0.3em] text-gray-400">Twitter</label>
+                  <input
+                    id="profile-twitter"
+                    type="url"
+                    value={socialLinks.twitter}
+                    onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
+                    required
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-orange-200 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="profile-linkedin" className="text-xs uppercase tracking-[0.3em] text-gray-400">LinkedIn</label>
+                  <input
+                    id="profile-linkedin"
+                    type="url"
+                    value={socialLinks.linkedin}
+                    onChange={(e) => setSocialLinks({ ...socialLinks, linkedin: e.target.value })}
+                    required
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-orange-200 focus:outline-none"
+                  />
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-xs text-gray-400">
+                  Completing every field unlocks a verified badge and priority placement across the
+                  Eventie network.
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="text-sm text-gray-600">Location</label>
-            <input
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              required
-              className="w-full mt-2 p-3 border border-gray-300 rounded-md shadow-md"
-            />
-          </div>
-
-          {/* Social Links */}
-          <div>
-            <label className="text-sm text-gray-600">Twitter</label>
-            <input
-              type="url"
-              value={socialLinks.twitter}
-              onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
-              required
-              className="w-full mt-2 p-3 border border-gray-300 rounded-md shadow-md"
-            />
-          </div>
-
-          <div>
-            <label className="text-sm text-gray-600">LinkedIn</label>
-            <input
-              type="url"
-              value={socialLinks.linkedin}
-              onChange={(e) => setSocialLinks({ ...socialLinks, linkedin: e.target.value })}
-              required
-              className="w-full mt-2 p-3 border border-gray-300 rounded-md shadow-md"
-            />
-          </div>
-
-          {/* Submit */}
           <button
             onClick={handleProfileUpdate}
             disabled={saving}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-md shadow-md mt-6 hover:bg-blue-700 disabled:bg-gray-400 transition"
+            className="mt-10 w-full rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-gray-900 transition hover:bg-gray-200 disabled:opacity-60"
           >
-            {saving ? 'Saving...' : 'Save Profile'}
+            {saving ? 'Saving profile...' : 'Save profile'}
           </button>
-        </div>
-        
+        </section>
       </div>
-       {/* Mobile Navigation */}
-       <Mobilenav/>      
-    </div>
+      <Mobilenav />
+    </main>
   );
 };
 
