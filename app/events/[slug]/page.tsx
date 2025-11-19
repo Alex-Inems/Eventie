@@ -49,14 +49,15 @@ const EventDetailPage = () => {
                     const allEventsSnapshot = await get(eventsRef);
 
                     if (allEventsSnapshot.exists()) {
-                        const allEvents = allEventsSnapshot.val();
-                        const foundEvent = Object.entries(allEvents).find(([key, value]: [string, Event]) => {
-                            const eventSlug = `${value.title?.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-')}-${key}`;
+                        const allEvents = allEventsSnapshot.val() as Record<string, Event>;
+                        const foundEvent = Object.entries(allEvents).find(([key, value]) => {
+                            const event = value as Event;
+                            const eventSlug = `${event.title?.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-')}-${key}`;
                             return eventSlug === params.slug || key === eventId;
                         });
 
                         if (foundEvent) {
-                            setEvent({ ...foundEvent[1] as Event, id: foundEvent[0] });
+                            setEvent({ ...foundEvent[1], id: foundEvent[0] });
                         } else {
                             setEvent(null);
                         }
