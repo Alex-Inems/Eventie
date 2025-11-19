@@ -87,7 +87,8 @@ const EventCreationForm = () => {
             const loadedSpeakers = eventData.speakers.map((s: string | { name: string; bio?: string; photo?: string }, idx: number) => {
               const speakerObj = typeof s === 'string' ? { name: s } : s;
               if (speakerObj.photo && typeof speakerObj.photo === 'string') {
-                setSpeakerPreviews(prev => ({ ...prev, [idx]: speakerObj.photo }));
+                const photoUrl: string = speakerObj.photo;
+                setSpeakerPreviews(prev => ({ ...prev, [idx]: photoUrl }));
               }
               return {
                 name: speakerObj.name || '',
