@@ -116,7 +116,7 @@ const Navbar = () => {
             {currentUser ? (
               <div className="flex items-center space-x-4">
                 <SmartImage
-                  src={currentUser.photoURL}
+                  src={currentUser.photoURL || undefined}
                   alt="Profile Picture"
                   className="rounded-full"
                   width={40}
