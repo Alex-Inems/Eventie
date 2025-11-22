@@ -54,7 +54,7 @@ const EventsList = () => {
           }
           
           return {
-            id: key,
+          id: key,
             ...eventData,
             // Ensure imageUrl is properly set (don't override if it exists)
             imageUrl: rawImageUrl && rawImageUrl.trim() ? rawImageUrl : undefined,

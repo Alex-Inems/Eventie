@@ -37,7 +37,7 @@ const Sidebar = () => {
   };
 
   const confirmLogout = () => {
-    logout();
+      logout();
     setShowLogoutConfirm(false);
   };
 

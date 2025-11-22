@@ -758,7 +758,7 @@ const EventCreationForm = () => {
                           accept="image/*"
                         onChange={(e) => handleSpeakerPhotoChange(index, e.target.files?.[0] || null)}
                           className="w-full text-xs text-gray-400"
-                        />
+                      />
                       </div>
                       <button type="button" onClick={() => {
                         removeSpeaker(index);

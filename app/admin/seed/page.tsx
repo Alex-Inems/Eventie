@@ -458,13 +458,13 @@ export default function SeedPage() {
                         {deleting ? 'Deleting All Events...' : '🗑️ Delete All Events'}
                     </button>
 
-                    <button
-                        onClick={handleSeed}
+                <button
+                    onClick={handleSeed}
                         disabled={loading || deleting}
-                        className="w-full rounded-full border border-white/20 bg-white/10 px-8 py-4 text-base font-semibold text-white transition hover:border-white disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Seeding...' : 'Start Seeding Database'}
-                    </button>
+                    className="w-full rounded-full border border-white/20 bg-white/10 px-8 py-4 text-base font-semibold text-white transition hover:border-white disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {loading ? 'Seeding...' : 'Start Seeding Database'}
+                </button>
                 </div>
             </div>
         </div>

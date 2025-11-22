@@ -124,11 +124,19 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
       return;
     }
 
+    if (!event) {
+      toast.error('Event information not available');
+      return;
+    }
+
     const user = auth.currentUser;
     if (!user) {
       toast.error('Please sign in to purchase tickets');
       return;
     }
+
+    // Store event in const so TypeScript knows it's not null in nested function
+    const eventData = event;
 
     setProcessingPayment(ticket.id);
     const email = user.email || 'guest@example.com';
@@ -169,7 +177,7 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
               {
                 display_name: 'Event',
                 variable_name: 'event',
-                value: event.title,
+                value: eventData.title,
               },
               {
                 display_name: 'Ticket Type',
@@ -354,13 +362,13 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
             </span>
           </div>
           
-          {event.tickets.length > 0 ? (
+        {event.tickets.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2">
               {event.tickets.map((ticket) => {
                 const isAvailable = ticket?.quantity && parseInt(ticket.quantity) > 0;
                 const isPopular = ticket.type === 'VIP' || ticket.type === 'Early Bird';
 
-                return (
+    return (
                   <div
                     key={ticket.id}
                     className={`group relative overflow-hidden rounded-3xl border transition-all duration-300 ${
@@ -409,7 +417,7 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
                         </div>
                       </div>
 
-                      {process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY ? (
+        {process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY ? (
                         <button
                           onClick={() => handlePaystackPayment(ticket)}
                           disabled={!isAvailable || processingPayment === ticket.id}
@@ -438,8 +446,8 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
                         </div>
                       )}
                     </div>
-                  </div>
-                );
+      </div>
+    );
               })}
             </div>
           ) : (
@@ -449,22 +457,22 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
               <p className="text-gray-400">Tickets for this event are not yet available. Please check back later.</p>
             </div>
           )}
-        </div>
+      </div>
 
         {/* QR Code Section */}
-        {qrData && (
+      {qrData && (
           <div className="rounded-3xl border border-green-500/30 bg-green-500/10 p-8">
             <div className="mb-4 flex items-center gap-2 text-green-200">
               <HiCheckCircle className="h-6 w-6" />
               <h3 className="text-xl font-semibold">Payment Successful!</h3>
             </div>
             <p className="mb-6 text-gray-300">Your ticket has been purchased. Show this QR code at the event entrance.</p>
-            <QRCodeGenerator
-              data={qrData}
-              eventId={event.id}
-              ticketType={qrData.split('_')[1] || 'N/A'}
-              username={qrData.split('_')[0] || 'Anonymous'}
-            />
+        <QRCodeGenerator
+          data={qrData}
+          eventId={event.id}
+          ticketType={qrData.split('_')[1] || 'N/A'}
+          username={qrData.split('_')[0] || 'Anonymous'}
+        />
           </div>
         )}
 
