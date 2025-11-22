@@ -337,15 +337,15 @@ const TicketsClient = ({ eventId }: { eventId: string }) => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {eventDetails.speakers.slice(0, 6).map((speaker: Speaker, index: number) => (
                 <div key={index} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  {typeof speaker === 'object' && speaker.name ? (
+                  {typeof speaker === 'string' ? (
+                    <p className="font-semibold">{speaker}</p>
+                  ) : (
                     <>
                       <h3 className="mb-1 font-semibold">{speaker.name}</h3>
                       {speaker.bio && (
                         <p className="text-sm text-gray-400 line-clamp-2">{speaker.bio}</p>
                       )}
                     </>
-                  ) : (
-                    <p className="font-semibold">{speaker}</p>
                   )}
                 </div>
               ))}
